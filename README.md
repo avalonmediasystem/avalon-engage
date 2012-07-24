@@ -1,8 +1,8 @@
 # Hydrant::Engage
 
-TODO: Write a gem description
+Javascript/Flash hybrid media player forked from Matterhorn Engage.
 
-## Installation
+# Installation
 
 Add this line to your application's Gemfile:
 
@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+This player needs Matterhorn running. Provide @stream_link and @mediapackage_id to the _video_player partial.
 
 ## Contributing
 
@@ -27,3 +27,4 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Added some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
