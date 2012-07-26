@@ -24,6 +24,10 @@
     $.getURLParameter = function (name) { 
       if (name == "id") {
         return "<%= @mediapackage_id %>";
+      } else if (name == "mediaUrl1") {
+        return "<%= @stream_link %>";
+      } else if (name == "mimetype1") {
+        return "<%= @mimetype %>";
       } else { 
         return origGetURLParameterFn(name);
       } 
