@@ -1,11 +1,13 @@
-<% if (defined? @stream_link) && (!@stream_link.start_with?("rtmp")) %>
+<% @stream = @video_asset.stream %>
+
+<% if (defined? @stream) && (!@stream.start_with?("rtmp")) %>
 	<div class="well">	   
 	   <h3><i class="icon-time"></i> Upload status</h3>
 	   <p>The file is still being processed by the system. Please check back later for a preview.</p>
 	</div>
-<% elsif defined? @stream_link %>
-
-  <link rel="stylesheet" type="text/css" href="/engage/ui/css/jquery-ui/jquery-ui.css"></link>
+<% elsif (defined? @stream) %>
+  <%= content_for :page_styles do %>
+    <link rel="stylesheet" type="text/css" href="/engage/ui/css/jquery-ui/jquery-ui.css"></link>
   <link rel="stylesheet" type="text/css" href="/engage/ui/css/jquery-ui/jquery-ui-custom.css"></link>
   <link rel="stylesheet" type="text/css" href="/engage/ui/css/player-multi-hybrid/player-multi-hybrid.css" ></link>
   <link rel="stylesheet" type="text/css" href="/engage/ui/css/player-multi-hybrid/player-multi-hybrid-icons.css" ></link>
@@ -16,6 +18,9 @@
   <link rel="stylesheet" type="text/css" href="/engage/ui/css/player/watch.css" ></link>
   <link rel="stylesheet" type="text/css" href="/engage/ui/css/annotation/oc.comments.css">
   <link rel="stylesheet" type="text/css" href="/engage/ui/css/annotation/oc.comment.list.css">
+  <% end %>
+  
+  <%= content_for :page_scripts do %>  
   <!-- Javascript includes -->
   <script type="text/javascript" src="/engage/ui/js/jquery/plugins/jquery.utils.js"></script>
   <script type="text/javascript">
@@ -79,6 +84,18 @@
   <script type="text/javascript" src="/engage/ui/js/player/player-multi-hybrid-initialize.js"></script>
   <script type="text/javascript" src="/engage/ui/js/ext/trimpath.js"></script>
   <script type="text/javascript" src="/engage/ui/js/player/watch.js"></script>
+
+    <script type="text/javascript">
+      $('#oc_btn-description').parent().hide();
+      $('#oc_btn-slidetext').parent().hide();
+      $('#oc_btn-slides').parent().hide();
+      
+      $('#oc_btn-description').detach();
+      $('#oc_btn-slidetext').detach();
+      $('#oc_btn-slides').detach();
+    </script>
+  <% end %>  
+  
     <div id="skip">
       <a href="#controls" tabindex="10">
         Skip to player controls
@@ -653,17 +670,6 @@
   	<p id="oc_dbclick-info-text">
   		double click to add comment
   	</p>
-  </div>        
-    <!--  END Comment dialogs -->
-
-    <script type="text/javascript">
-      $('#oc_btn-description').parent().hide();
-      $('#oc_btn-slidetext').parent().hide();
-      $('#oc_btn-slides').parent().hide();
-      
-      $('#oc_btn-description').detach();
-      $('#oc_btn-slidetext').detach();
-      $('#oc_btn-slides').detach();
-    </script>
-    
+  </div>    
+<!-- Close IF block -->
 <% end %>
