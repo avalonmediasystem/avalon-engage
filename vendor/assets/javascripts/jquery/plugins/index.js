@@ -1,0 +1,9 @@
+//= require ./jARIA
+//= require ./jquery.cookie
+//= require ./jquery.corners
+//= require ./jquery.identicon5
+//= require ./jquery.crypt
+//= require ./jquery.wysiwyg
+//= require ./jquery.client
+//= require ./jquery.sparkline.min
+//= require ./jquery.timers-1.2

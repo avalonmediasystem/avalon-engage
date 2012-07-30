@@ -1,0 +1,19 @@
+    <!-- #time-chooser-layer dialog -->
+    <div id="oc_time-chooser-layer" class="ui-widget ui-widget-content ui-corner-all oc_popuplayer ui-helper-hidden" title="change player time/ session time" tabindex="-1" role="dialog" aria-hidden="true">
+      <ul id="oc_time-chooser-list" class="oc_popuplayer-list">
+        <li>
+          <a href="javascript: " id="oc_btn-player-time" onclick="Opencast.Player.doToggleTimeLayer();" class="handcursor" title="View player time" role="button">
+            View player time
+          </a>
+        </li>
+        <li>
+          <a href="javascript: " id="oc_btn-session-time" onclick="Opencast.Player.doToggleTimeLayer();" class="handcursor" title="View session time" role="button">
+            View session time
+          </a>
+        </li>
+      </ul>
+      <button id="oc_btn-leave-session-time" class="oc_btn-close">
+        Leave time dialog
+      </button>
+    </div>
+    <!-- END #oc_time-chooser-layer -->

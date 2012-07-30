@@ -1,0 +1,13 @@
+// Overrides to return mediapackageid from VideoAsset object instead of URL Params
+    var origGetURLParameterFn = $.getURLParameter;
+    $.getURLParameter = function (name) { 
+      if (name == "id") {
+        return "<%= @mediapackage_id %>";
+      } else { 
+        return origGetURLParameterFn(name);
+      } 
+    }
+
+
+
+  
