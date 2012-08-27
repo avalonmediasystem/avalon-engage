@@ -28,11 +28,17 @@
     var origGetURLParameterFn = $.getURLParameter;
     $.getURLParameter = function (name) { 
       if (name == "id") {
-        return "<%= @mediapackage_id %>";
+        return "<%= mediapackage_id %>";
       } else if (name == "mediaUrl1") {
-        return "<%= @stream_link %>";
+        return "<%= stream %>";
+      } else if (name == "mediaUrl2") {
+        return "";
+      } else if (name == "mediaResolution1") {
+        return "640x390";
+      } else if (name == "mediaResolution2") {
+        return "";
       } else if (name == "mimetype1") {
-        return "<%= @mimetype %>";
+        return "<%= mimetype %>";
       } else { 
         return origGetURLParameterFn(name);
       } 
@@ -84,6 +90,7 @@
   <script type="text/javascript" src="/engage/ui/js/player/player-multi-hybrid-initialize.js"></script>
   <script type="text/javascript" src="/engage/ui/js/ext/trimpath.js"></script>
   <script type="text/javascript" src="/engage/ui/js/player/watch.js"></script>
+  <script type="text/javascript" src="/engage/ui/js/player/player-multi-hybrid-flash.js"></script>
 
     <script type="text/javascript">
       $('#oc_btn-description').parent().hide();
@@ -236,7 +243,6 @@
   <div id="oc_slide-comments"></div>
 
       <div id="oc_flash-player">
-        <script type="text/javascript" src="/engage/ui/js/player/player-multi-hybrid-flash.js"></script>
       </div>
 
       <!-- START: Hide when no Javascript is activated -->
