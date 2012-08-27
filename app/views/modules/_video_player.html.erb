@@ -1,11 +1,9 @@
-<% @stream = @video_asset.stream %>
-
-<% if (defined? @stream) && (!@stream.start_with?("rtmp")) %>
+<% if (!stream.start_with?("rtmp")) %>
 	<div class="well">	   
 	   <h3><i class="icon-time"></i> Upload status</h3>
 	   <p>The file is still being processed by the system. Please check back later for a preview.</p>
 	</div>
-<% elsif (defined? @stream) %>
+<% else %>
   <%= content_for :page_styles do %>
     <link rel="stylesheet" type="text/css" href="/engage/ui/css/jquery-ui/jquery-ui.css"></link>
   <link rel="stylesheet" type="text/css" href="/engage/ui/css/jquery-ui/jquery-ui-custom.css"></link>
