@@ -262,7 +262,8 @@ function AC_AddExtension(src, ext)
             }
         }
         // DO NOT CHANGE THIS. IE8 Flash 10.0 cannot handle adding the SWF by jquery
-        document.write(str);
+        // document.write(str);
+        document.getElementById('oc_flash-player').innerHTML = str;
     }
 
     function AC_FL_RunContent()
