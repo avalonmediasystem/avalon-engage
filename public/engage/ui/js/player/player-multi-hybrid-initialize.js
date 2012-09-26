@@ -1140,7 +1140,8 @@ Opencast.Initialize = (function ()
         switch (size)
         {
         case VIDEOSIZEAUDIO:
-            newHeight = 200;
+//            newHeight = 200;
+            newHeight = 0;
             break;
         case VIDEOSIZESINGLE:
             newHeight = getNewHeightSingle();
@@ -1165,13 +1166,13 @@ Opencast.Initialize = (function ()
             break;
         }
         // set the new height
-        if (newHeight > 0)
-        {
+//        if (newHeight > 0)
+//        {
             newHeight = Math.round(newHeight);
             $('#oc_flash-player').css("height", newHeight + "px");
             //Trigger Resize Event
             $('#oc_flash-player').trigger('doResize');
-        }
+//        }
     }
 
     /**
