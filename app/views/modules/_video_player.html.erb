@@ -5,8 +5,6 @@
 	</div>
 <% else %>
   <%= content_for :page_styles do %>
-    <link rel="stylesheet" type="text/css" href="/engage/ui/css/jquery-ui/jquery-ui.css"></link>
-  <link rel="stylesheet" type="text/css" href="/engage/ui/css/jquery-ui/jquery-ui-custom.css"></link>
   <link rel="stylesheet" type="text/css" href="/engage/ui/css/player-multi-hybrid/player-multi-hybrid.css" ></link>
   <link rel="stylesheet" type="text/css" href="/engage/ui/css/player-multi-hybrid/player-multi-hybrid-icons.css" ></link>
   <link rel="stylesheet" type="text/css" href="/engage/ui/css/player/shared.css" ></link>
@@ -42,12 +40,12 @@
         return "<%= mediapackage_id %>";
       } else if (name == "mediaUrl1") {
         return "<%= stream %>";
-      } else if (name == "mediaUrl2") {
-        return "";
-      } else if (name == "mediaResolution1") {
-        return "640x390";
-      } else if (name == "mediaResolution2") {
-        return "";
+//      } else if (name == "mediaUrl2") {
+//        return "";
+//      } else if (name == "mediaResolution1") {
+//        return "640x390";
+//      } else if (name == "mediaResolution2") {
+//        return "";
       } else if (name == "mimetype1") {
         return "<%= mimetype %>";
       } else { 
@@ -59,7 +57,6 @@
   <script type="text/javascript" src="/engage/ui/js/bridge/Videodisplay.js"></script>
   <script type="text/javascript" src="/engage/ui/js/jquery/plugins/jARIA.js"></script>
   <script type="text/javascript" src="/engage/ui/js/jquery/plugins/jquery.cookie.js"></script>
-  <script type="text/javascript" src="/engage/ui/js/jquery/jquery-ui.js"></script>
   <script type="text/javascript" src="/engage/ui/js/jquery/plugins/jquery.corners.js"></script>
   <script type="text/javascript" src="/engage/ui/js/jquery/plugins/jquery.identicon5.js"></script>
   <script type="text/javascript" src="/engage/ui/js/jquery/plugins/jquery.crypt.js"></script>

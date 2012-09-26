@@ -558,14 +558,17 @@ Opencast.Watch = (function ()
             }
             else if (mediaUrlOne !== '' && mediaUrlTwo === '')
             {
-                var pos = mediaUrlOne.lastIndexOf(".");
-                var fileType = mediaUrlOne.substring(pos + 1);
-                if (fileType === 'mp3')
+		$.log('Media URL one is not empty');
+                var pos = mimetypeOne.lastIndexOf("/");
+                var fileType = mimetypeOne.substring(0, pos);
+                if (fileType === 'audio')
                 {
+		    $.log('File type is audio, setting up an audio player');
                     Opencast.Player.setVideoSizeList(AUDIOPLAYER);
                 }
                 else
                 {
+		    $.log('File type is not audio, setting up a single player');
                     Opencast.Initialize.setMediaResolution(mediaResolutionOne, mediaResolutionTwo);
                     Opencast.Player.setVideoSizeList(SINGLEPLAYER);
                 }
