@@ -911,7 +911,7 @@ Opencast.Initialize = (function ()
         var mediaPackageId = $.getURLParameter('id');
         $.ajax(
         {
-            url: 'http://localhost:8080/search/episode.json',
+            url: Opencast.Watch.getSearchURL(),
             data: 'id=' + mediaPackageId,
             dataType: 'jsonp',
             jsonp: 'jsonp',
@@ -948,7 +948,7 @@ Opencast.Initialize = (function ()
         $.ajax(
         {
             type: 'GET',
-            url: "http://localhost:8080/usertracking/detailenabled",
+            url: Opencast.Watch.getAnalyticsURL(),
             dataType: 'text',
             success: function (text)
             {
