@@ -437,27 +437,30 @@ Opencast.Player = (function ()
     function setPlayhead(newPosition)
     {
         curPosition = newPosition;
+        
         var fullPosition = Math.round(newPosition);
-        if (inPosition <= fullPosition && fullPosition <= inPosition + INTERVAL_LENGTH)
-        {
-            outPosition = fullPosition;
-            if (inPosition + INTERVAL_LENGTH === outPosition)
-            {
-                addFootprint();
-                inPosition = outPosition;
-            }
-        }
-        else
-        {
-            addFootprint();
-            inPosition = fullPosition;
-	    addEvent(Opencast.logging.SEEK);
-            outPosition = fullPosition;
-        }
+        // AVALON: uncomment and fix this so the next block of code gets execute everytime
+        //         if (inPosition <= fullPosition && fullPosition <= inPosition + INTERVAL_LENGTH)
+        //         {
+        //             outPosition = fullPosition;
+        //             if (inPosition + INTERVAL_LENGTH === outPosition)
+        //             {
+        //                 addFootprint();
+        //                 inPosition = outPosition;
+        //             }
+        //         }
+        //         else
+        //         {
+        //             addFootprint();
+        //             inPosition = fullPosition;
+        // addEvent(Opencast.logging.SEEK);
+        //             outPosition = fullPosition;
+        //         }
         if (getDragging() === false)
         {
             refreshScrubberPosition();
         }
+        
     }
 
     /**
@@ -1620,6 +1623,7 @@ Opencast.Player = (function ()
      */
     function getCurrentPlayPauseState()
     {
+        console.log("GET: " + currentPlayPauseState);
         return currentPlayPauseState;
     }
 
@@ -1630,6 +1634,7 @@ Opencast.Player = (function ()
      */
     function setCurrentPlayPauseState(state)
     {
+        console.log("SET: " + currentPlayPauseState);
         currentPlayPauseState = state;
     }
 
