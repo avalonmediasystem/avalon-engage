@@ -965,7 +965,6 @@ Opencast.Initialize = (function ()
             },
             error: function (a, b, c)
             {
-								console.log("FAILED usertracking/detailenabled");
                 Opencast.Player.detailedLogging = false;
 		Opencast.Player.addEvent(Opencast.logging.NORMAL_DETAILED_LOGGING_AJAX_FAILED);
             }

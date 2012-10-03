@@ -426,6 +426,7 @@ Opencast.Player = (function ()
      */
     function setDuration(time)
     {
+        var caller = arguments.callee.caller.name;
         duration = time;
     }
 
@@ -440,22 +441,22 @@ Opencast.Player = (function ()
         
         var fullPosition = Math.round(newPosition);
         // AVALON: uncomment and fix this so the next block of code gets execute everytime
-        //         if (inPosition <= fullPosition && fullPosition <= inPosition + INTERVAL_LENGTH)
-        //         {
-        //             outPosition = fullPosition;
-        //             if (inPosition + INTERVAL_LENGTH === outPosition)
-        //             {
-        //                 addFootprint();
-        //                 inPosition = outPosition;
-        //             }
-        //         }
-        //         else
-        //         {
-        //             addFootprint();
-        //             inPosition = fullPosition;
-        // addEvent(Opencast.logging.SEEK);
-        //             outPosition = fullPosition;
-        //         }
+        // if (inPosition <= fullPosition && fullPosition <= inPosition + INTERVAL_LENGTH)
+        // {
+        //     outPosition = fullPosition;
+        //     if (inPosition + INTERVAL_LENGTH === outPosition)
+        //     {
+        //         addFootprint();
+        //         inPosition = outPosition;
+        //     }
+        // }
+        // else
+        // {
+        //     addFootprint();
+        //     inPosition = fullPosition;
+        //     addEvent(Opencast.logging.SEEK);
+        //     outPosition = fullPosition;
+        // }
         if (getDragging() === false)
         {
             refreshScrubberPosition();
@@ -1623,7 +1624,6 @@ Opencast.Player = (function ()
      */
     function getCurrentPlayPauseState()
     {
-        console.log("GET: " + currentPlayPauseState);
         return currentPlayPauseState;
     }
 
@@ -1634,7 +1634,6 @@ Opencast.Player = (function ()
      */
     function setCurrentPlayPauseState(state)
     {
-        console.log("SET: " + currentPlayPauseState);
         currentPlayPauseState = state;
     }
 
@@ -1842,9 +1841,15 @@ Opencast.Player = (function ()
     function addEvent(eventType)
     {
         //If the detailed logging is turned off (false), and the log type is not a footprint then return.
-	if (!Opencast.Player.detailedLogging && (eventType != Opencast.logging.FOOTPRINT || eventType.matches("/.*AJAX-FAILED/i"))) {
+      	if (!Opencast.Player.detailedLogging && (eventType != Opencast.logging.FOOTPRINT || eventType.matches("/.*AJAX-FAILED/i"))) {
           return;
         }
+
+        // Return if the in and out positions are NaN
+        if( isNaN(inPosition) || isNaN(outPosition) ){
+          return;
+        }
+
         $.ajax(
         {
             type: 'GET',

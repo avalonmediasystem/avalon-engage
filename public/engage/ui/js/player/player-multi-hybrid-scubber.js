@@ -174,7 +174,8 @@ Opencast.Scrubber = (function ()
 
         $("#scubber-channel").click(function (e)
         {
-	    Opencast.Player.addEvent(Opencast.logging.SEEK_TIMELINE_CLICK);
+            // AVALON: Commented this out because of VOV-653, uncomment when Matterhorn analytics works.
+        // Opencast.Player.addEvent(Opencast.logging.SEEK_TIMELINE_CLICK);
             var newPosition = 0;
             var x = e.pageX - $("#scubber-channel").offset().left;
             x = Math.max(4, x - 8);
