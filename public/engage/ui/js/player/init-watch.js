@@ -65,7 +65,7 @@ $(document).ready( function() {
 					{
 					    $("#oc_ie8comments").hide();
 					});
-                $("#oc_ie8comments").show();
+//                $("#oc_ie8comments").show();
 	    } else
 	    {
                 $("#oc_ie8comments").detach();
@@ -84,7 +84,7 @@ $(document).ready( function() {
 					{
 					    $("#oc_mobile_redirect").hide();
 					});
-                $("#oc_mobile_redirect").show();
+//                $("#oc_mobile_redirect").show();
 	    } else
 	    {
                 $("#oc_mobile_redirect").detach();
