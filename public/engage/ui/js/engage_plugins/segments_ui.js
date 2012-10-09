@@ -556,7 +556,7 @@ Opencast.segments_ui = (function ()
                     if(!onceLoaded)
                     {
                         Opencast.Watch.continueProcessing();
-                        onceLoaded = true;
+                        //onceLoaded = true;
                     }
                 }
                 else

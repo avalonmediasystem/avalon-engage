@@ -58,6 +58,7 @@ Opencast.Initialize = (function ()
         ddmenuitem = 0,
         dropdownActive = false,
         keysSet = false,
+        eventsBound = false, // AVALON: used to avoid multiple binds when switch streams 
         KEY_0,
         KEY_1,
         KEY_2,
@@ -385,528 +386,17 @@ Opencast.Initialize = (function ()
         $('#oc_video-size-controls').bind('mouseout', dropdown_timer);
     }
 
-    $(document).ready(function ()
-    {
-        keyboardListener();
-        $('#wysiwyg').wysiwyg(
-        {
-            controls: {
-                strikeThrough: {
-                    visible: true
-                },
-                underline: {
-                    visible: true
-                },
-                separator00: {
-                    visible: true
-                },
-                justifyLeft: {
-                    visible: true
-                },
-                justifyCenter: {
-                    visible: true
-                },
-                justifyRight: {
-                    visible: true
-                },
-                justifyFull: {
-                    visible: true
-                },
-                separator01: {
-                    visible: true
-                },
-                indent: {
-                    visible: true
-                },
-                outdent: {
-                    visible: true
-                },
-                separator02: {
-                    visible: true
-                },
-                subscript: {
-                    visible: true
-                },
-                superscript: {
-                    visible: true
-                },
-                separator03: {
-                    visible: true
-                },
-                undo: {
-                    visible: true
-                },
-                redo: {
-                    visible: true
-                },
-                separator04: {
-                    visible: true
-                },
-                insertOrderedList: {
-                    visible: true
-                },
-                insertUnorderedList: {
-                    visible: true
-                },
-                insertHorizontalRule: {
-                    visible: true
-                },
-                separator07: {
-                    visible: true
-                },
-                cut: {
-                    visible: true
-                },
-                copy: {
-                    visible: true
-                },
-                paste: {
-                    visible: true
-                }
-            }
-        });
-        $('#oc_player_video-dropdown').bind('mouseover', dropdownVideo_open);
-        $('#oc_player_video-dropdown').bind('mouseout', dropdown_timer);
-        // Handler focus
-        $('#oc_btn-dropdown').focus(function ()
-        {
-            setDivId(VIDEOSIZE);
-            dropdown_open();
-        });
-        // Handler blur
-        $('#oc_btn-dropdown').blur(function ()
-        {
-            dropdown_timer();
-        });
-        $('#oc_sound').bind('mouseover', dropdown_open);
-        $('#oc_sound').bind('mouseout', dropdown_timer);
-        // Handler focus
-        $('#oc_btn-volume').focus(function ()
-        {
-            setDivId(VOLUME);
-            dropdown_open();
-        });
-        $('#slider_volume_Thumb').focus(function ()
-        {
-            setDivId(VOLUME);
-            dropdown_open();
-        });
-        // Handler blur
-        $('#oc_btn-volume').blur(function ()
-        {
-            dropdown_timer();
-        });
-        $('#slider_volume_Thumb').blur(function ()
-        {
-            dropdown_timer();
-        });
-        // aria roles
-        $("#editorContainer").attr("className", "oc_editTime");
-        $("#editField").attr("className", "oc_editTime");
-        $("#oc_btn-volume").attr('role', 'button');
-        $("#oc_btn-volume").attr('aria-pressed', 'false');
-        $("#oc_btn-play-pause").attr('role', 'button');
-        $("#oc_btn-play-pause").attr('aria-pressed', 'false');
-        $("#oc_btn-skip-backward").attr('role', 'button');
-        $("#oc_btn-skip-backward").attr('aria-labelledby', 'Skip Backward');
-        $("#oc_btn-rewind").attr('role', 'button');
-        $("#oc_btn-rewind").attr('aria-labelledby', 'Rewind: Control + Alt + R');
-        $("#oc_btn-fast-forward").attr('role', 'button');
-        $("#oc_btn-fast-forward").attr('aria-labelledby', 'Fast Forward: Control + Alt + F');
-        $("#oc_btn-skip-forward").attr('role', 'button');
-        $("#oc_btn-skip-forward").attr('aria-labelledby', 'Skip Forward');
-        $("#oc_current-time").attr('role', 'timer');
-        $("#oc_edit-time").attr('role', 'timer');
-        $("#oc_btn-slides").attr('role', 'button');
-        $("#oc_btn-slides").attr('aria-pressed', 'false');
-        $("#oc_myBookmarks-checkbox").attr('role', 'checkbox');
-        $("#oc_myBookmarks-checkbox").attr('aria-checked', 'true');
-        $("#oc_myBookmarks-checkbox").attr('aria-describedby', 'My Bookmarks');
-        $("#oc_publicBookmarks-checkbox").attr('role', 'checkbox');
-        $("#oc_publicBookmarks-checkbox").attr('aria-checked', 'true');
-        $("#oc_publicBookmarks-checkbox").attr('aria-describedby', 'Public Bookmarks');
-        // Handler for .click()
-        $('#oc_btn-skip-backward').click(function ()
-        {
-            // Delete forward Timeout and Clicks
-            if (segmentTimeoutForward !== undefined)
-            {
-                clearTimeout(segmentTimeoutForward);
-            }
-            segmentForwardClickedCounter = 0;
-            // Handle backward Timeout and Clicks
-            if (segmentTimeoutBackward !== undefined)
-            {
-                clearTimeout(segmentTimeoutBackward);
-            }++segmentBackwardClickedCounter;
-            segmentTimeoutBackward = setTimeout(function ()
-            {
-                var currentSlideId = Opencast.segments.getCurrentSlideId();
-                var sec = Opencast.segments.getSegmentSeconds(currentSlideId - segmentBackwardClickedCounter);
-                if (sec < 0)
-                {
-                    sec = 0;
-                }
-                segmentBackwardClickedCounter = 0;
-                Opencast.Watch.seekSegment(sec);
-            }, segmentForwardDelay);
-        });
-        $('#oc_btn-skip-forward').click(function ()
-        {
-            // Delete backward Timeout and Clicks
-            if (segmentTimeoutBackward !== undefined)
-            {
-                clearTimeout(segmentTimeoutBackward);
-            }
-            segmentBackwardClickedCounter = 0;
-            // Handle forward Timeout and Clicks
-            if (segmentTimeoutForward !== undefined)
-            {
-                clearTimeout(segmentTimeoutForward);
-            }++segmentForwardClickedCounter;
-            segmentTimeoutForward = setTimeout(function ()
-            {
-                var currentSlideId = Opencast.segments.getCurrentSlideId();
-                var sec = Opencast.segments.getSegmentSeconds(currentSlideId + segmentForwardClickedCounter);
-                var secOfLastSeg = Opencast.segments.getSegmentSeconds(Opencast.segments.getNumberOfSegments() - 1);
-                if ((sec == 0) || (sec > secOfLastSeg))
-                {
-                    sec = secOfLastSeg;
-                }
-                segmentForwardClickedCounter = 0;
-                Opencast.Watch.seekSegment(sec);
-            }, segmentForwardDelay);
-        });
-        $('#oc_btn-play-pause').click(function ()
-        {
-            Opencast.Player.doTogglePlayPause();
-        });
-        $('#oc_btn-volume').click(function ()
-        {
-            Opencast.Player.doToggleMute();
-        });
-        $('#oc_btn-cc').click(function ()
-        {
-            Opencast.Player.doToogleClosedCaptions();
-        });
-        $('#oc_current-time').click(function ()
-        {
-            Opencast.Player.showEditTime();
-        });
-        $('#oc_searchField').click(function ()
-        {
-            if (clickMatterhornSearchField === false)
-            {
-                $("#oc_searchField").attr('value', '');
-                clickMatterhornSearchField = true;
-            }
-        });
-        $('#oc_lecturer-search-field').click(function ()
-        {
-            if (clickLecturerSearchField === false)
-            {
-                $("#oc_lecturer-search-field").attr('value', '');
-                clickLecturerSearchField = true;
-            }
-            // Deselect any selected Tab
-            $('#oc_ui_tabs').tabs('selected', -1);
-            $(".ui-tabs-selected").removeClass("ui-state-active").removeClass("ui-tabs-selected");
-        });
-        $('#oc_btn-rewind').mousedown(function ()
-        {
-            if (!locked)
-            {
-                locked = true;
-                setTimeout(function ()
-                {
-                    locked = false;
-                }, 400);
-                Opencast.Player.doRewind();
-            }
-        });
-        $('#oc_btn-play-pause').mousedown(function ()
-        {
-            Opencast.Player.PlayPauseMouseDown();
-        });
-        $('#oc_btn-fast-forward').mousedown(function ()
-        {
-            if (!locked)
-            {
-                locked = true;
-                setTimeout(function ()
-                {
-                    locked = false;
-                }, 400);
-                Opencast.Player.doFastForward();
-            }
-        });
-        $('#oc_btn-rewind').mouseup(function ()
-        {
-            Opencast.Player.stopRewind();
-        });
-        $('#oc_btn-play-pause').mouseup(function ()
-        {
-            Opencast.Player.PlayPauseMouseOver();
-        });
-        $('#oc_btn-fast-forward').mouseup(function ()
-        {
-            Opencast.Player.stopFastForward();
-        });
-        // Handler onBlur
-        $('#oc_edit-time').blur(function ()
-        {
-            Opencast.Player.hideEditTime();
-        });
-        // Handler keypress
-        $('#oc_current-time').keypress(function (event)
-        {
-            if (event.keyCode === 13)
-            {
-                Opencast.Player.showEditTime();
-            }
-        });
-        $('#oc_current-time').focus(function (event)
-        {
-            Opencast.Player.showEditTime();
-        });
-        $('#oc_edit-time').keypress(function (event)
-        {
-            if (event.keyCode === 13)
-            {
-                Opencast.Player.editTime();
-            }
-        });
-        // Handler keydown
-        $('#oc_btn-rewind').keydown(function (event)
-        {
-            if (event.keyCode === 13 || event.keyCode === 32)
-            {
-                Opencast.Player.doRewind();
-            }
-            else if (event.keyCode === 9)
-            {
-                Opencast.Player.stopRewind();
-            }
-        });
-        $('#oc_btn-fast-forward').keydown(function (event)
-        {
-            if (event.keyCode === 13 || event.keyCode === 32)
-            {
-                Opencast.Player.doFastForward();
-            }
-            else if (event.keyCode === 9)
-            {
-                Opencast.Player.stopFastForward();
-            }
-        });
-        $('#oc_current-time').keydown(function (event)
-        {
-            if (event.keyCode === 37)
-            {
-                Opencast.Player.doRewind();
-            }
-            else if (event.keyCode === 39)
-            {
-                Opencast.Player.doFastForward();
-            }
-        });
-        // Handler keyup
-        $('#oc_btn-rewind').keyup(function (event)
-        {
-            if (event.keyCode === 13 || event.keyCode === 32)
-            {
-                Opencast.Player.stopRewind();
-            }
-        });
-        $('#oc_btn-fast-forward').keyup(function (event)
-        {
-            if (event.keyCode === 13 || event.keyCode === 32)
-            {
-                Opencast.Player.stopFastForward();
-            }
-        });
-        $('#oc_current-time').keyup(function (event)
-        {
-            if (event.keyCode === 37)
-            {
-                Opencast.Player.stopRewind();
-            }
-            else if (event.keyCode === 39)
-            {
-                Opencast.Player.stopFastForward();
-            }
-        });
-        $('#oc_embed-costum-width-textinput').keyup(function (event)
-        {
-            if ((event.keyCode >= 48 && event.keyCode <= 57) || event.keyCode === 8 || event.keyCode === 9 || (event.keyCode >= 96 && event.keyCode <= 105))
-            {
-                setCustomWidth($('#oc_embed-costum-width-textinput').val());
-                setCostumEmbedHeight();
-            }
-            else
-            {
-                $('#oc_embed-costum-width-textinput').attr('value', getCustomWidth());
-            }
-            $('#oc_embed-costum-width-textinput').css('background-color', '#ffffff');
-        });
-        $('#oc_embed-costum-height-textinput').keyup(function (event)
-        {
-            if ((event.keyCode >= 48 && event.keyCode <= 57) || event.keyCode === 8 || event.keyCode === 9 || (event.keyCode >= 96 && event.keyCode <= 105))
-            {
-                setCustomHeight($('#oc_embed-costum-height-textinput').val());
-                setCostumEmbedWidth();
-            }
-            else
-            {
-                $('#oc_embed-costum-height-textinput').attr('value', getCustomHeight());
-            }
-            $('#oc_embed-costum-height-textinput').css('background-color', '#ffffff');
-        }); /* initalise embed buttons */
-        $("#oc_embed-icon-one, #oc_embed-icon-two, #oc_embed-icon-three, #oc_embed-icon-four, #oc_embed-icon-five", "#oc_embed-left").button();
-	/* initalise search button */
-        $("#oc_btn-search", "#oc_search").button();
-        $("#oc_btn-cc", "#oc_video-time").button();
-        $('#oc_btn-leave-share, #oc_btn-leave-session-time').button(
-        {
-            icons: {
-                primary: 'ui-icon-close'
-            },
-            text: false
-        });
-        $('#oc_btn-leave-share, #oc_btn-leave-session-time').click(function ()
-        {
-            Opencast.Player.doToggleShare();
-        }); /* initalise closed tabs */
-        $("#oc_ui_tabs").tabs(
-        {
-            selected: -1
-        });
-        $("#oc_ui_tabs").tabs("option", "collapsible", true);
-	/* handle select event for each tab */
-        $("#oc_ui_tabs").tabs(
-        {
-            select: function (event, ui)
-            {
-                switch (ui.index)
-                {
-                case 0:
-                    Opencast.Description.doToggle();
-                    break;
-                case 1:
-                    Opencast.segments.doToggle();
-                    break;
-                case 2:
-                    Opencast.segments_text.doToggle();
-                    break;
-                case 3:
-                    Opencast.Annotation_Comment_List.doToggle();
-                    break;
-                case 4:
-                    // Have a look at the - (engage-ui) watch.html - search trigger-function
-                    break;
-                }
-            }
-        });
-        $("#oc_ui_tabs .ui-tabs-nav li").last().css('float', 'right');
-        $(window).resize(function (e)
-        {
-            if (Opencast.Player.shareOverlayDisplayed())
-            {
-                Opencast.Player.showShare();
-            }
-	    Opencast.Player.addEvent(Opencast.logging.RESIZE_TO + $(window).width() + 'x' + $(window).height());
-        });
-        //bind click functions
-        $('#oc_share-button').click(function (e)
-        {
-            Opencast.Player.doToggleShare(e);
-        });
-        $('#oc_btn-email').click(function ()
-        {
-	    Opencast.Player.addEvent(Opencast.logging.EMAIL);
-            Opencast.Player.doToggleShare();
-        });
-        $('#oc_btn-email').click(function ()
-        {
-            Opencast.Player.doToggleShareTime();
-        });
-        $('#oc_time-chooser').click(function ()
-        {
-            Opencast.Player.doToggleTimeLayer();
-        });
-        $('#oc_checkbox-statistics').click(function ()
-        {
-            Opencast.Analytics.doToggle();
-        });
-        $('#oc_checkbox-annotations').click(function ()
-        {
-            Opencast.Annotation_Chapter.doToggle();
-        });
-        $('#oc_checkbox-annotation-comment').click(function ()
-        {
-            Opencast.Annotation_Comment.doToggle();
-        });
-        //bind click events to show dialog
-        $('#oc_shortcuts').dialog(
-        {
-            autoOpen: false,
-            width: 600
-        });
-        $('#oc_shortcut-button').click(function (e)
-        {
-            Opencast.Player.doToggleShortcuts(e, 'oc_shortcut-button');
-        });
-
-        $('#oc_downloads').dialog(
-        {
-            autoOpen: false,
-            width: 600,
-            resizable: false
-        });
-        $('#oc_download-button').click(function (e)
-        {
-            Opencast.Player.doToggleDownloads(e, 'oc_download-button');
-        });
-
-        $('#oc_embed').dialog(
-        {
-            autoOpen: false,
-            width: 800
-        });
-        $('#oc_share-time').dialog(
-        {
-            autoOpen: false,
-            width: 800
-        });
-        $('#oc_btn-embed').click(function ()
-        {
-            Opencast.Player.doToggleEmbed();
-        });
-        $('#oc_btn-share-time').click(function ()
-        {
-            Opencast.Player.doToggleShareTime();
-        });
-        $('#oc_series').hide();
-        $('#oc_see-more-button').click(function (e)
-        {
-            Opencast.Series.doToggleSeriesDropdown()
-        });
-        $('#oc_video-player-controls').hide();
-
-        // on change
-        $('#oc_video-quality-options').change(function()
-        {
-            var videoQuality = $('#oc_video-quality-options').val();
-            $.log("Request to set video quality to " + videoQuality + ", changing the URL...");
-            var loc = window.location;
-            var newLoc = $.getCleanedURLAdvanced(false, true, videoQuality, true);
-            // change URL if new parameter
-            if (loc != newLoc)
-            {
-                window.location = newLoc;
-            }
-        });
-
+    $(document).ready(function(){
+      initme();
+    });
+      
+    function initme(){
+      // AVALON: prevents double binding when switching streams
+      if (!eventsBound) {
+        setupEvents();
+        eventsBound = true;
+      }
+      
         onPlayerReadyListener();
         var mediaPackageId = $.getURLParameter('id');
         $.ajax(
@@ -969,7 +459,532 @@ Opencast.Initialize = (function ()
 		Opencast.Player.addEvent(Opencast.logging.NORMAL_DETAILED_LOGGING_AJAX_FAILED);
             }
         });
-    });
+    }
+    
+    // AVALON: binds handlers to events
+    function setupEvents() {
+      keyboardListener();
+      $('#wysiwyg').wysiwyg(
+      {
+          controls: {
+              strikeThrough: {
+                  visible: true
+              },
+              underline: {
+                  visible: true
+              },
+              separator00: {
+                  visible: true
+              },
+              justifyLeft: {
+                  visible: true
+              },
+              justifyCenter: {
+                  visible: true
+              },
+              justifyRight: {
+                  visible: true
+              },
+              justifyFull: {
+                  visible: true
+              },
+              separator01: {
+                  visible: true
+              },
+              indent: {
+                  visible: true
+              },
+              outdent: {
+                  visible: true
+              },
+              separator02: {
+                  visible: true
+              },
+              subscript: {
+                  visible: true
+              },
+              superscript: {
+                  visible: true
+              },
+              separator03: {
+                  visible: true
+              },
+              undo: {
+                  visible: true
+              },
+              redo: {
+                  visible: true
+              },
+              separator04: {
+                  visible: true
+              },
+              insertOrderedList: {
+                  visible: true
+              },
+              insertUnorderedList: {
+                  visible: true
+              },
+              insertHorizontalRule: {
+                  visible: true
+              },
+              separator07: {
+                  visible: true
+              },
+              cut: {
+                  visible: true
+              },
+              copy: {
+                  visible: true
+              },
+              paste: {
+                  visible: true
+              }
+          }
+      });
+      $('#oc_player_video-dropdown').bind('mouseover', dropdownVideo_open);
+      $('#oc_player_video-dropdown').bind('mouseout', dropdown_timer);
+      // Handler focus
+      $('#oc_btn-dropdown').focus(function ()
+      {
+          setDivId(VIDEOSIZE);
+          dropdown_open();
+      });
+      // Handler blur
+      $('#oc_btn-dropdown').blur(function ()
+      {
+          dropdown_timer();
+      });
+      $('#oc_sound').bind('mouseover', dropdown_open);
+      $('#oc_sound').bind('mouseout', dropdown_timer);
+      // Handler focus
+      $('#oc_btn-volume').focus(function ()
+      {
+          setDivId(VOLUME);
+          dropdown_open();
+      });
+      $('#slider_volume_Thumb').focus(function ()
+      {
+          setDivId(VOLUME);
+          dropdown_open();
+      });
+      // Handler blur
+      $('#oc_btn-volume').blur(function ()
+      {
+          dropdown_timer();
+      });
+      $('#slider_volume_Thumb').blur(function ()
+      {
+          dropdown_timer();
+      });
+      // aria roles
+      $("#editorContainer").attr("className", "oc_editTime");
+      $("#editField").attr("className", "oc_editTime");
+      $("#oc_btn-volume").attr('role', 'button');
+      $("#oc_btn-volume").attr('aria-pressed', 'false');
+      $("#oc_btn-play-pause").attr('role', 'button');
+      $("#oc_btn-play-pause").attr('aria-pressed', 'false');
+      $("#oc_btn-skip-backward").attr('role', 'button');
+      $("#oc_btn-skip-backward").attr('aria-labelledby', 'Skip Backward');
+      $("#oc_btn-rewind").attr('role', 'button');
+      $("#oc_btn-rewind").attr('aria-labelledby', 'Rewind: Control + Alt + R');
+      $("#oc_btn-fast-forward").attr('role', 'button');
+      $("#oc_btn-fast-forward").attr('aria-labelledby', 'Fast Forward: Control + Alt + F');
+      $("#oc_btn-skip-forward").attr('role', 'button');
+      $("#oc_btn-skip-forward").attr('aria-labelledby', 'Skip Forward');
+      $("#oc_current-time").attr('role', 'timer');
+      $("#oc_edit-time").attr('role', 'timer');
+      $("#oc_btn-slides").attr('role', 'button');
+      $("#oc_btn-slides").attr('aria-pressed', 'false');
+      $("#oc_myBookmarks-checkbox").attr('role', 'checkbox');
+      $("#oc_myBookmarks-checkbox").attr('aria-checked', 'true');
+      $("#oc_myBookmarks-checkbox").attr('aria-describedby', 'My Bookmarks');
+      $("#oc_publicBookmarks-checkbox").attr('role', 'checkbox');
+      $("#oc_publicBookmarks-checkbox").attr('aria-checked', 'true');
+      $("#oc_publicBookmarks-checkbox").attr('aria-describedby', 'Public Bookmarks');
+      // Handler for .click()
+      $('#oc_btn-skip-backward').click(function ()
+      {
+          // Delete forward Timeout and Clicks
+          if (segmentTimeoutForward !== undefined)
+          {
+              clearTimeout(segmentTimeoutForward);
+          }
+          segmentForwardClickedCounter = 0;
+          // Handle backward Timeout and Clicks
+          if (segmentTimeoutBackward !== undefined)
+          {
+              clearTimeout(segmentTimeoutBackward);
+          }++segmentBackwardClickedCounter;
+          segmentTimeoutBackward = setTimeout(function ()
+          {
+              var currentSlideId = Opencast.segments.getCurrentSlideId();
+              var sec = Opencast.segments.getSegmentSeconds(currentSlideId - segmentBackwardClickedCounter);
+              if (sec < 0)
+              {
+                  sec = 0;
+              }
+              segmentBackwardClickedCounter = 0;
+              Opencast.Watch.seekSegment(sec);
+          }, segmentForwardDelay);
+      });
+      $('#oc_btn-skip-forward').click(function ()
+      {
+          // Delete backward Timeout and Clicks
+          if (segmentTimeoutBackward !== undefined)
+          {
+              clearTimeout(segmentTimeoutBackward);
+          }
+          segmentBackwardClickedCounter = 0;
+          // Handle forward Timeout and Clicks
+          if (segmentTimeoutForward !== undefined)
+          {
+              clearTimeout(segmentTimeoutForward);
+          }++segmentForwardClickedCounter;
+          segmentTimeoutForward = setTimeout(function ()
+          {
+              var currentSlideId = Opencast.segments.getCurrentSlideId();
+              var sec = Opencast.segments.getSegmentSeconds(currentSlideId + segmentForwardClickedCounter);
+              var secOfLastSeg = Opencast.segments.getSegmentSeconds(Opencast.segments.getNumberOfSegments() - 1);
+              if ((sec == 0) || (sec > secOfLastSeg))
+              {
+                  sec = secOfLastSeg;
+              }
+              segmentForwardClickedCounter = 0;
+              Opencast.Watch.seekSegment(sec);
+          }, segmentForwardDelay);
+      });
+
+      $('#oc_btn-play-pause').click(function ()
+      {
+        $.log("PLAYPAUSE");
+          Opencast.Player.doTogglePlayPause();
+      });
+      $('#oc_btn-volume').click(function ()
+      {
+          Opencast.Player.doToggleMute();
+      });
+      $('#oc_btn-cc').click(function ()
+      {
+          Opencast.Player.doToogleClosedCaptions();
+      });
+      $('#oc_current-time').click(function ()
+      {
+          Opencast.Player.showEditTime();
+      });
+      $('#oc_searchField').click(function ()
+      {
+          if (clickMatterhornSearchField === false)
+          {
+              $("#oc_searchField").attr('value', '');
+              clickMatterhornSearchField = true;
+          }
+      });
+      $('#oc_lecturer-search-field').click(function ()
+      {
+          if (clickLecturerSearchField === false)
+          {
+              $("#oc_lecturer-search-field").attr('value', '');
+              clickLecturerSearchField = true;
+          }
+          // Deselect any selected Tab
+          $('#oc_ui_tabs').tabs('selected', -1);
+          $(".ui-tabs-selected").removeClass("ui-state-active").removeClass("ui-tabs-selected");
+      });
+      $('#oc_btn-rewind').mousedown(function ()
+      {
+          if (!locked)
+          {
+              locked = true;
+              setTimeout(function ()
+              {
+                  locked = false;
+              }, 400);
+              Opencast.Player.doRewind();
+          }
+      });
+      $('#oc_btn-play-pause').mousedown(function ()
+      {
+          Opencast.Player.PlayPauseMouseDown();
+      });
+      $('#oc_btn-fast-forward').mousedown(function ()
+      {
+          if (!locked)
+          {
+              locked = true;
+              setTimeout(function ()
+              {
+                  locked = false;
+              }, 400);
+              Opencast.Player.doFastForward();
+          }
+      });
+      $('#oc_btn-rewind').mouseup(function ()
+      {
+          Opencast.Player.stopRewind();
+      });
+      $('#oc_btn-play-pause').mouseup(function ()
+      {
+          Opencast.Player.PlayPauseMouseOver();
+      });
+      $('#oc_btn-fast-forward').mouseup(function ()
+      {
+          Opencast.Player.stopFastForward();
+      });
+      // Handler onBlur
+      $('#oc_edit-time').blur(function ()
+      {
+          Opencast.Player.hideEditTime();
+      });
+      // Handler keypress
+      $('#oc_current-time').keypress(function (event)
+      {
+          if (event.keyCode === 13)
+          {
+              Opencast.Player.showEditTime();
+          }
+      });
+      $('#oc_current-time').focus(function (event)
+      {
+          Opencast.Player.showEditTime();
+      });
+      $('#oc_edit-time').keypress(function (event)
+      {
+          if (event.keyCode === 13)
+          {
+              Opencast.Player.editTime();
+          }
+      });
+      // Handler keydown
+      $('#oc_btn-rewind').keydown(function (event)
+      {
+          if (event.keyCode === 13 || event.keyCode === 32)
+          {
+              Opencast.Player.doRewind();
+          }
+          else if (event.keyCode === 9)
+          {
+              Opencast.Player.stopRewind();
+          }
+      });
+      $('#oc_btn-fast-forward').keydown(function (event)
+      {
+          if (event.keyCode === 13 || event.keyCode === 32)
+          {
+              Opencast.Player.doFastForward();
+          }
+          else if (event.keyCode === 9)
+          {
+              Opencast.Player.stopFastForward();
+          }
+      });
+      $('#oc_current-time').keydown(function (event)
+      {
+          if (event.keyCode === 37)
+          {
+              Opencast.Player.doRewind();
+          }
+          else if (event.keyCode === 39)
+          {
+              Opencast.Player.doFastForward();
+          }
+      });
+      // Handler keyup
+      $('#oc_btn-rewind').keyup(function (event)
+      {
+          if (event.keyCode === 13 || event.keyCode === 32)
+          {
+              Opencast.Player.stopRewind();
+          }
+      });
+      $('#oc_btn-fast-forward').keyup(function (event)
+      {
+          if (event.keyCode === 13 || event.keyCode === 32)
+          {
+              Opencast.Player.stopFastForward();
+          }
+      });
+      $('#oc_current-time').keyup(function (event)
+      {
+          if (event.keyCode === 37)
+          {
+              Opencast.Player.stopRewind();
+          }
+          else if (event.keyCode === 39)
+          {
+              Opencast.Player.stopFastForward();
+          }
+      });
+      $('#oc_embed-costum-width-textinput').keyup(function (event)
+      {
+          if ((event.keyCode >= 48 && event.keyCode <= 57) || event.keyCode === 8 || event.keyCode === 9 || (event.keyCode >= 96 && event.keyCode <= 105))
+          {
+              setCustomWidth($('#oc_embed-costum-width-textinput').val());
+              setCostumEmbedHeight();
+          }
+          else
+          {
+              $('#oc_embed-costum-width-textinput').attr('value', getCustomWidth());
+          }
+          $('#oc_embed-costum-width-textinput').css('background-color', '#ffffff');
+      });
+      $('#oc_embed-costum-height-textinput').keyup(function (event)
+      {
+          if ((event.keyCode >= 48 && event.keyCode <= 57) || event.keyCode === 8 || event.keyCode === 9 || (event.keyCode >= 96 && event.keyCode <= 105))
+          {
+              setCustomHeight($('#oc_embed-costum-height-textinput').val());
+              setCostumEmbedWidth();
+          }
+          else
+          {
+              $('#oc_embed-costum-height-textinput').attr('value', getCustomHeight());
+          }
+          $('#oc_embed-costum-height-textinput').css('background-color', '#ffffff');
+      }); /* initalise embed buttons */
+      $("#oc_embed-icon-one, #oc_embed-icon-two, #oc_embed-icon-three, #oc_embed-icon-four, #oc_embed-icon-five", "#oc_embed-left").button();
+/* initalise search button */
+      $("#oc_btn-search", "#oc_search").button();
+      $("#oc_btn-cc", "#oc_video-time").button();
+      $('#oc_btn-leave-share, #oc_btn-leave-session-time').button(
+      {
+          icons: {
+              primary: 'ui-icon-close'
+          },
+          text: false
+      });
+      $('#oc_btn-leave-share, #oc_btn-leave-session-time').click(function ()
+      {
+          Opencast.Player.doToggleShare();
+      }); /* initalise closed tabs */
+      $("#oc_ui_tabs").tabs(
+      {
+          selected: -1
+      });
+      $("#oc_ui_tabs").tabs("option", "collapsible", true);
+/* handle select event for each tab */
+      $("#oc_ui_tabs").tabs(
+      {
+          select: function (event, ui)
+          {
+              switch (ui.index)
+              {
+              case 0:
+                  Opencast.Description.doToggle();
+                  break;
+              case 1:
+                  Opencast.segments.doToggle();
+                  break;
+              case 2:
+                  Opencast.segments_text.doToggle();
+                  break;
+              case 3:
+                  Opencast.Annotation_Comment_List.doToggle();
+                  break;
+              case 4:
+                  // Have a look at the - (engage-ui) watch.html - search trigger-function
+                  break;
+              }
+          }
+      });
+      $("#oc_ui_tabs .ui-tabs-nav li").last().css('float', 'right');
+      $(window).resize(function (e)
+      {
+          if (Opencast.Player.shareOverlayDisplayed())
+          {
+              Opencast.Player.showShare();
+          }
+    Opencast.Player.addEvent(Opencast.logging.RESIZE_TO + $(window).width() + 'x' + $(window).height());
+      });
+      //bind click functions
+      $('#oc_share-button').click(function (e)
+      {
+          Opencast.Player.doToggleShare(e);
+      });
+      $('#oc_btn-email').click(function ()
+      {
+    Opencast.Player.addEvent(Opencast.logging.EMAIL);
+          Opencast.Player.doToggleShare();
+      });
+      $('#oc_btn-email').click(function ()
+      {
+          Opencast.Player.doToggleShareTime();
+      });
+      $('#oc_time-chooser').click(function ()
+      {
+          Opencast.Player.doToggleTimeLayer();
+      });
+      $('#oc_checkbox-statistics').click(function ()
+      {
+          Opencast.Analytics.doToggle();
+      });
+      $('#oc_checkbox-annotations').click(function ()
+      {
+          Opencast.Annotation_Chapter.doToggle();
+      });
+      $('#oc_checkbox-annotation-comment').click(function ()
+      {
+          Opencast.Annotation_Comment.doToggle();
+      });
+      //bind click events to show dialog
+      $('#oc_shortcuts').dialog(
+      {
+          autoOpen: false,
+          width: 600
+      });
+      $('#oc_shortcut-button').click(function (e)
+      {
+          Opencast.Player.doToggleShortcuts(e, 'oc_shortcut-button');
+      });
+
+      $('#oc_downloads').dialog(
+      {
+          autoOpen: false,
+          width: 600,
+          resizable: false
+      });
+      $('#oc_download-button').click(function (e)
+      {
+          Opencast.Player.doToggleDownloads(e, 'oc_download-button');
+      });
+
+      $('#oc_embed').dialog(
+      {
+          autoOpen: false,
+          width: 800
+      });
+      $('#oc_share-time').dialog(
+      {
+          autoOpen: false,
+          width: 800
+      });
+      $('#oc_btn-embed').click(function ()
+      {
+          Opencast.Player.doToggleEmbed();
+      });
+      $('#oc_btn-share-time').click(function ()
+      {
+          Opencast.Player.doToggleShareTime();
+      });
+      $('#oc_series').hide();
+      $('#oc_see-more-button').click(function (e)
+      {
+          Opencast.Series.doToggleSeriesDropdown()
+      });
+      $('#oc_video-player-controls').hide();
+
+      // on change
+      $('#oc_video-quality-options').change(function()
+      {
+          var videoQuality = $('#oc_video-quality-options').val();
+          $.log("Request to set video quality to " + videoQuality + ", changing the URL...");
+          var loc = window.location;
+          var newLoc = $.getCleanedURLAdvanced(false, true, videoQuality, true);
+          // change URL if new parameter
+          if (loc != newLoc)
+          {
+              window.location = newLoc;
+          }
+      });      
+    }
 
     /**
      * http://www.roytanck.com
@@ -1402,6 +1417,7 @@ Opencast.Initialize = (function ()
         setPlayerReady: setPlayerReady,
         onPlayerReady: onPlayerReady,
         init: init,
+        initme: initme,
         setMediaResolution: setMediaResolution
     };
 }());
