@@ -476,6 +476,17 @@ Opencast.Watch = (function ()
             $.log('Set Video URL 2 manually');
         }
 
+        // Set Duration
+        var durDiv = $('#dc-extent').text();
+        if ((durDiv !== undefined) && (durDiv !== null) && (durDiv != ''))
+        {
+            duration = parseInt(parseInt(durDiv) / 1000);
+            if ((!isNaN(duration)) && (duration > 0))
+            {
+                Opencast.Player.setDuration(duration);
+            }
+        }
+
         // If URL Parameter display exists and is set to revert
         var display = $.getURLParameter('display');
         if ((display != null) && (display.toLowerCase() == 'invert') && (mediaUrlTwo != ''))
@@ -642,16 +653,6 @@ Opencast.Watch = (function ()
             $('#oc_video-time').show();
             $('#oc_sound').show();
         $('#oc_video-controls').show();
-        }
-        // Set Duration
-        var durDiv = $('#dc-extent').text();
-        if ((durDiv !== undefined) && (durDiv !== null) && (durDiv != ''))
-        {
-            duration = parseInt(parseInt(durDiv) / 1000);
-            if ((!isNaN(duration)) && (duration > 0))
-            {
-                Opencast.Player.setDuration(duration);
-            }
         }
         if(!advancedPlayer)
         {
