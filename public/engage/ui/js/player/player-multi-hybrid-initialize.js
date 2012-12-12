@@ -385,10 +385,6 @@ Opencast.Initialize = (function ()
         $('#oc_video-size-controls').bind('mouseover', dropdownVideo_open);
         $('#oc_video-size-controls').bind('mouseout', dropdown_timer);
     }
-
-    $(document).ready(function(){
-      initme();
-    });
       
     function initme(){
       // AVALON: prevents double binding when switching streams

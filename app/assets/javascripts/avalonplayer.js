@@ -1,58 +1,135 @@
 avalonPlayer = function(id, opts) {
-  function Player(el) {
+
+  var instance = function(el) {
     var _opts = {};
     var _element = el;
     var _playerType;
 
     this.init = function(opts) {
       _opts = opts;
-      $.each(_opts, function(index, val) {
-        if (_opts.flash && swfobject.hasFlashPlayerVersion("9")) {
-          _element.html("Here, have a Flesh vid!"); // Pulls in Engage
-          _playerType = "Flash";
-        } else if (_opts.hls && canPlayHlsH264()) {
-          _element.html('<video><source src="' + _opts.hls + '"/></video>');
-          _playerType = "HLS";
-        } else {
-          _element.html('Please install/update your Flash player');
-        }
-      });
+      if (_opts.flash && swfobject.hasFlashPlayerVersion("9")) {
+        // Pulls in Engage
+        _generateEngagePlayer();
+        _playerType = "flash";
+      } else if (_opts.hls) {
+        _element.html('<' + opts.format + '><source src="' + _opts.hls + '"/><p>Your browser does not support our videos</p>' 
+                      + '</' + opts.format + '>');
+        _playerType = "hls";
+      } else if (_opts.flash && !swfobject.hasFlashPlayerVersion("9")) {
+        _element.html('<p>Please install/update your Flash player</p>');
+      }
       
       return this;
     }
 
     this.switchStream = function(opts) {
+      _opts = opts;
       // Change source and reinitialize player based on _playerType
+      if (_playerType == "flash") {
+        Opencast.Player.doPause();
+        Opencast.Player.setCurrentTime('00:00:00');
+        Opencast.Player.setPlayhead(0);
+ 
+        _setEngageStream(opts);
+        Opencast.Initialize.initme();
+      } else if (_playerType == "hls") {
+        _element.find('source').attr("src", opts.hls);
+      }
       return this;
     }
 
-    this.print = function() {
-      console.log(_sources);
+    function _setEngageStream(opts) {
+      // Overrides to return custom values instead of URL Params
+      var origGetURLParameterFn = $.getURLParameter;
+      $.getURLParameter = function (name) { 
+        if (name == "id") {
+          return opts.mediaPackageId;
+        } else if (name == "mediaUrl1") {
+          return opts.flash;
+        } else if (name == "mimetype1") {
+          return opts.mimetype;
+        } else { 
+          return origGetURLParameterFn(name);
+        }  
+      }
     }
 
-    // Player helpers
-    function canPlayHlsH264() {
-      return (isiOS() || isSafariMac()); // Should also check for Android 4.0 here
+    // This whole thing is horrible, needs fixing
+    function _generateEngagePlayer() {
+      var styles = ["/engage/ui/css/player-multi-hybrid/player-multi-hybrid.css",
+                    "/engage/ui/css/player-multi-hybrid/player-multi-hybrid-icons.css",
+                    "/engage/ui/css/player/shared.css",
+                    "/engage/ui/css/player/jquery.wysiwyg.css",
+                    "/engage/ui/css/oc.segments.css",
+                    "/engage/ui/css/player/watch.css"];
+      $.each(styles, function(i, val) {
+        // Needs IE fix: document.createStyleSheet();
+        $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', val) );
+      });
+      
+      // Don't try this at home!
+      _element.load("/video_player.htm", function(){ 
+        var scripts = [ "/engage/ui/js/jquery/plugins/jquery.utils.js",
+                        "/engage/ui/js/bridge/lib/FABridge.js",
+                        "/engage/ui/js/bridge/Videodisplay.js",
+                        "/engage/ui/js/jquery/plugins/jARIA.js",
+                        "/engage/ui/js/jquery/plugins/jquery.cookie.js",
+                        "/engage/ui/js/jquery/plugins/jquery.corners.js",
+                        "/engage/ui/js/jquery/plugins/jquery.identicon5.js",
+                        "/engage/ui/js/jquery/plugins/jquery.crypt.js",
+                        "/engage/ui/js/player/init-watch.js",
+                        "/engage/ui/js/player/player-multi-hybrid-scubber.js",
+                        "/engage/ui/js/player/player-multi-hybrid.js",
+                        "/engage/ui/js/player/ariaSpinbutton.js",
+                        "/engage/ui/js/jquery/plugins/jquery.wysiwyg.js",
+                        "/engage/ui/js/jquery/plugins/jquery.client.js",
+                        "/engage/ui/js/jquery/plugins/jquery.sparkline.min.js",
+                        "/engage/ui/js/engage-ui.js",
+                        "/engage/ui/js/jquery/plugins/jquery.timers-1.2.js",
+                        "/engage/ui/js/engage_plugins/plugin-controller.js",
+                        "/engage/ui/js/engage_plugins/description.js",
+                        "/engage/ui/js/engage_plugins/download.js",
+                        "/engage/ui/js/engage_plugins/description-plugin.js",
+                        "/engage/ui/js/engage_plugins/segments_ui.js",
+                        "/engage/ui/js/engage_plugins/segments_ui-plugin.js",
+                        "/engage/ui/js/engage_plugins/segments_ui_slider-plugin.js",
+                        "/engage/ui/js/engage_plugins/segments.js",
+                        "/engage/ui/js/engage_plugins/segments-plugin.js",
+                        "/engage/ui/js/engage_plugins/segments_text.js",
+                        "/engage/ui/js/engage_plugins/segments_text-plugin.js",
+                        "/engage/ui/js/engage_plugins/series-plugin.js",
+                        "/engage/ui/js/engage_plugins/series.js",
+                        "/engage/ui/js/engage_plugins/logging.js",
+                        "/engage/ui/js/player/player-multi-hybrid-initialize.js",
+                        "/engage/ui/js/ext/trimpath.js",
+                        "/engage/ui/js/player/watch.js",
+                        "/engage/ui/js/player/player-multi-hybrid-flash.js" ];
+        $.each(scripts, function(index, url){
+          var script = document.createElement('script');
+          script.src = url;
+          _element.append(script);
+        });
+
+        _setEngageStream(_opts);
+        Opencast.Initialize.initme();
+        _cleanupEngage();
+      });
     }
 
-    var uaLC = navigator.userAgent.toLowerCase();
-    function isiOS() {
-      var isiPad = uaLC.indexOf('safari') > -1 && uaLC.indexOf('ipad') > -1;
-      var isiPhone = uaLC.indexOf('safari') > -1 && (uaLC.indexOf('iphone') > -1 || uaLC.indexOf('itouch') > -1);
-      return (isiPad || isiPhone);
+    function _cleanupEngage() {
+      $("#oc_btn-description").parent().hide();
+      $("#oc_btn-slidetext").parent().hide();
+      $("#oc_btn-slides").parent().hide();
+      
+      $("#oc_btn-description").detach();
+      $("#oc_btn-slidetext").detach();
+      $("#oc_btn-slides").detach();
     }
-
-    function isSafariMac() {
-      return uaLC.indexOf('safari') > -1 && uaLC.indexOf('mac') > -1;
-    }
-  } 
-
+  }
   var el = $(id);
   if (el) {
-    return new Player(el).init(opts);
+    return new instance(el).init(opts);
   } else {
     return null;
   }
 };
-
-
