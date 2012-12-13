@@ -12,8 +12,7 @@ avalonPlayer = function(id, opts) {
         _generateEngagePlayer();
         _playerType = "flash";
       } else if (_opts.hls) {
-        _element.html('<' + opts.format + '><source src="' + _opts.hls + '"/><p>Your browser does not support our videos</p>' 
-                      + '</' + opts.format + '>');
+        _generateHTML5Player(opts);
         _playerType = "hls";
       } else if (_opts.flash && !swfobject.hasFlashPlayerVersion("9")) {
         _element.html('<p>Please install/update your Flash player</p>');
@@ -33,9 +32,14 @@ avalonPlayer = function(id, opts) {
         _setEngageStream(opts);
         Opencast.Initialize.initme();
       } else if (_playerType == "hls") {
-        _element.find('source').attr("src", opts.hls);
+        _generateHTML5Player(opts);
       }
       return this;
+    }
+
+    function _generateHTML5Player(opts) {
+      _element.html('<' + opts.format + '><source src="' + _opts.hls + '"/><p>Your browser does not support our videos</p>'
+                  + '</' + opts.format + '>');
     }
 
     function _setEngageStream(opts) {
