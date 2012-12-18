@@ -12,7 +12,8 @@ avalonPlayer = function(id, opts) {
         _generateEngagePlayer();
         _playerType = "flash";
       } else if (_opts.hls) {
-        _element.html('<' + opts.format + '><source src="' + _opts.hls + '"/><p>Your browser does not support our videos</p>' 
+        _element.html('<' + opts.format + ' width="320" height="240"><source src="' + _opts.hls + '"/>' 
+                      +  '<p>Your browser does not support our videos</p>' 
                       + '</' + opts.format + '>');
         _playerType = "hls";
       } else if (_opts.flash && !swfobject.hasFlashPlayerVersion("9")) {
