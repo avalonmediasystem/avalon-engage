@@ -53,8 +53,6 @@ avalonPlayer = function(id, opts) {
           return opts.flash;
         } else if (name == "mimetype1") {
           return opts.mimetype;
-        } else if (name == "mediaResolution1") {
-          return opts.resolution;
         } else { 
           return origGetURLParameterFn(name);
         }  
