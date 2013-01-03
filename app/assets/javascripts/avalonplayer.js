@@ -67,7 +67,7 @@ avalonPlayer = function(id, opts) {
                     "/engage/ui/css/player/jquery.wysiwyg.css",
                     "/engage/ui/css/oc.segments.css",
                     "/engage/ui/css/player/watch.css",
-                    "/assets/stylesheets/avalonplayer.css"];
+                    "/assets/avalonplayer.css"];
       $.each(styles, function(i, val) {
         // Needs IE fix: document.createStyleSheet();
         $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', val) );
