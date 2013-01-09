@@ -8,11 +8,11 @@ avalonPlayer = function(id, opts) {
     this.init = function(opts) {
       _opts = opts;
       if (_opts.flash && swfobject.hasFlashPlayerVersion("9")) {
-        // Pulls in Engage
-        _generateEngagePlayer();
+        // Pulls in Engage, renders the first stream
+        _generateEngagePlayer(_opts.flash[0]);
         _playerType = "flash";
       } else if (_opts.hls) {
-        _generateHTML5Player(opts);
+        _generateHTML5Player(_opts.hls[0]);
         _playerType = "hls";
       } else if (_opts.flash && !swfobject.hasFlashPlayerVersion("9")) {
         _element.html('<p>Please install/update your Flash player</p>');
@@ -29,30 +29,30 @@ avalonPlayer = function(id, opts) {
         Opencast.Player.setCurrentTime('00:00:00');
         Opencast.Player.setPlayhead(0);
  
-        _setEngageStream(opts);
+        _setEngageStream(_opts.flash[0]);
         Opencast.Initialize.initme();
       } else if (_playerType == "hls") {
-        _generateHTML5Player(opts);
+        _generateHTML5Player(_opts.hls[0]);
       }
       return this;
     }
 
-    function _generateHTML5Player(opts) {
-      _element.html('<' + opts.format + ' poster= "' + opts.poster + '" controls="controls" width="320" height="240">'
-                  + '  <source src="' + _opts.hls + '"/><p>Your browser does not support our videos</p>'
-                  + '</' + opts.format + '>');
+    function _generateHTML5Player(stream) {
+      _element.html('<' + stream.format + ' poster= "' + _opts.poster + '" controls="controls" width="320" height="240">'
+                  + '  <source src="' + stream.hls + '"/><p>Your browser does not support our videos</p>'
+                  + '</' + stream.format + '>');
     }
 
-    function _setEngageStream(opts) {
+    function _setEngageStream(stream) {
       // Overrides to return custom values instead of URL Params
       var origGetURLParameterFn = $.getURLParameter;
       $.getURLParameter = function (name) { 
         if (name == "id") {
-          return opts.mediaPackageId;
+          return _opts.mediaPackageId;
         } else if (name == "mediaUrl1") {
-          return opts.flash;
+          return stream.url;
         } else if (name == "mimetype1") {
-          return opts.mimetype;
+          return stream.mimetype;
         } else { 
           return origGetURLParameterFn(name);
         }  
@@ -60,7 +60,7 @@ avalonPlayer = function(id, opts) {
     }
 
     // This whole thing is horrible, needs fixing
-    function _generateEngagePlayer() {
+    function _generateEngagePlayer(stream) {
       var styles = ["/engage/ui/css/player-multi-hybrid/player-multi-hybrid.css",
                     "/engage/ui/css/player-multi-hybrid/player-multi-hybrid-icons.css",
                     "/engage/ui/css/player/shared.css",
@@ -116,7 +116,7 @@ avalonPlayer = function(id, opts) {
           _element.append(script);
         });
 
-        _setEngageStream(_opts);
+        _setEngageStream(stream);
         Opencast.Initialize.initme();
         _cleanupEngage();
       });
