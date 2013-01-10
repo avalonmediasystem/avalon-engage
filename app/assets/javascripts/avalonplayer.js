@@ -14,6 +14,7 @@ avalonPlayer = function(id, opts) {
       } else if (_opts.hls) {
         _generateHTML5Player(_opts.hls[0]);
         _playerType = "hls";
+        _generateQualitySelector();
       } else if (_opts.flash && !swfobject.hasFlashPlayerVersion("9")) {
         _element.html('<p>Please install/update your Flash player</p>');
       }
@@ -33,6 +34,7 @@ avalonPlayer = function(id, opts) {
         Opencast.Initialize.initme();
       } else if (_playerType == "hls") {
         _generateHTML5Player(_opts.hls[0]);
+        _generateQualitySelector();
       }
       return this;
     }
@@ -44,6 +46,7 @@ avalonPlayer = function(id, opts) {
     }
 
     function _setEngageStream(stream) {
+      console.log(stream);
       // Overrides to return custom values instead of URL Params
       var origGetURLParameterFn = $.getURLParameter;
       $.getURLParameter = function (name) { 
@@ -119,7 +122,57 @@ avalonPlayer = function(id, opts) {
         _setEngageStream(stream);
         Opencast.Initialize.initme();
         _cleanupEngage();
+        _generateQualitySelector();
       });
+    }
+
+    function _generateQualitySelector() {
+      var selector = $('<select id="oc_quality"></select>');
+      if ($("#oc_quality").length > 0) {
+        selector = $("#oc_quality");
+        selector.html("");
+        selector.unbind();
+      }
+      if (_playerType == "flash") {
+        _appendQualityOptions(_opts.flash, selector);
+      } else if (_playerType == "hls") {
+        _appendQualityOptions(_opts.hls, selector);
+      }
+
+      selector.change(function() {
+        var newQual = $(this).val();
+        console.log("Selected quality: " + newQual);
+        // Repopulates player with the selected stream
+        if (_playerType == "flash") {
+          var streamInfo = _getStreamByQuality(_opts.flash, newQual);
+          Opencast.Player.doPause();
+          _setEngageStream(streamInfo);
+          Opencast.Initialize.initme();
+        } else if (_playerType == "hls") {
+          var streamInfo = _getStreamByQuality(_opts.hls, newQual);
+          _generateHTML5Player(streamInfo);
+        }
+      });
+
+      _element.append(selector);
+    }
+
+    function _appendQualityOptions(streamArray, selector) {
+      console.log(streamArray);
+      for (var i = 0; i < streamArray.length; i++) {
+        var quality = streamArray[i].quality;
+        var opt = $('<option/>').attr('value', quality).text(quality);
+        selector.append(opt);
+      }
+    }
+
+    // Gets a stream info hash of a specific quality
+    function _getStreamByQuality(streamArray, quality) {
+      for (var i = 0; i < streamArray.length; i++) {
+        if (quality == streamArray[i].quality) {
+          return streamArray[i];
+        }
+      }
     }
 
     function _cleanupEngage() {
