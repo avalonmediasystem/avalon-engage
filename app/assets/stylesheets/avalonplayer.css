@@ -3,17 +3,17 @@
 #oc_flash-player { height: 420px;}
 
 @media (min-width: 1400px) {
-    #oc_body { width: 1000px; }
+    #oc_body { width: 720px; }
     #oc_flash-player { height: 675px;}
 }
 
 @media (min-width: 1200px) and (max-width: 1400px) {
-    #oc_body { width: 800px; }
+    #oc_body { width: 580px; }
     #oc_flash-player { height: 540px;}
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
-    #oc_body { width: 620px; }
+    #oc_body { width: 460px; }
     #oc_flash-player { height: 420px;}
 }
 
