@@ -26,9 +26,10 @@ table
 }
 
 a, a:link, a:visited{
+  /* AVALON
   margin-right: 16px;
   cursor: pointer;
-  color: #2d8f8b; /* #A42424 */
+  color: #2d8f8b; */ /* #A42424 */
   text-decoration: none;
 }
 a:hover, a:focus{
