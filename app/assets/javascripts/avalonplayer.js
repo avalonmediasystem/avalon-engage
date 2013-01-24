@@ -46,7 +46,6 @@ avalonPlayer = function(id, opts) {
     }
 
     function _setEngageStream(stream) {
-      console.log(stream);
       // Overrides to return custom values instead of URL Params
       var origGetURLParameterFn = $.getURLParameter;
       $.getURLParameter = function (name) { 
@@ -141,7 +140,6 @@ avalonPlayer = function(id, opts) {
 
       selector.change(function() {
         var newQual = $(this).val();
-        console.log("Selected quality: " + newQual);
         // Repopulates player with the selected stream
         if (_playerType == "flash") {
           var streamInfo = _getStreamByQuality(_opts.flash, newQual);
@@ -158,7 +156,6 @@ avalonPlayer = function(id, opts) {
     }
 
     function _appendQualityOptions(streamArray, selector) {
-      console.log(streamArray);
       for (var i = 0; i < streamArray.length; i++) {
         var quality = streamArray[i].quality;
         var opt = $('<option/>').attr('value', quality).text(quality);
