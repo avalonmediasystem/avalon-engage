@@ -1179,9 +1179,11 @@ Opencast.Initialize = (function ()
 //        if (newHeight > 0)
 //        {
             newHeight = Math.round(newHeight);
+            /** AVALON
             $('#oc_flash-player').css("height", newHeight + "px");
             //Trigger Resize Event
             $('#oc_flash-player').trigger('doResize');
+            **/
 //        }
     }
 

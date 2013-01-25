@@ -77,51 +77,50 @@ avalonPlayer = function(id, opts) {
       
       // Don't try this at home!
       _element.load("/video_player.htm", function(){ 
-        var scripts = [ "/engage/ui/js/jquery/plugins/jquery.utils.js",
-                        "/engage/ui/js/bridge/lib/FABridge.js",
-                        "/engage/ui/js/bridge/Videodisplay.js",
-                        "/engage/ui/js/jquery/plugins/jARIA.js",
-                        "/engage/ui/js/jquery/plugins/jquery.cookie.js",
-                        "/engage/ui/js/jquery/plugins/jquery.corners.js",
-                        "/engage/ui/js/jquery/plugins/jquery.identicon5.js",
-                        "/engage/ui/js/jquery/plugins/jquery.crypt.js",
-                        "/engage/ui/js/player/init-watch.js",
-                        "/engage/ui/js/player/player-multi-hybrid-scubber.js",
-                        "/engage/ui/js/player/player-multi-hybrid.js",
-                        "/engage/ui/js/player/ariaSpinbutton.js",
-                        "/engage/ui/js/jquery/plugins/jquery.wysiwyg.js",
-                        "/engage/ui/js/jquery/plugins/jquery.client.js",
-                        "/engage/ui/js/jquery/plugins/jquery.sparkline.min.js",
-                        "/engage/ui/js/engage-ui.js",
-                        "/engage/ui/js/jquery/plugins/jquery.timers-1.2.js",
-                        "/engage/ui/js/engage_plugins/plugin-controller.js",
-                        "/engage/ui/js/engage_plugins/description.js",
-                        "/engage/ui/js/engage_plugins/download.js",
-                        "/engage/ui/js/engage_plugins/description-plugin.js",
-                        "/engage/ui/js/engage_plugins/segments_ui.js",
-                        "/engage/ui/js/engage_plugins/segments_ui-plugin.js",
-                        "/engage/ui/js/engage_plugins/segments_ui_slider-plugin.js",
-                        "/engage/ui/js/engage_plugins/segments.js",
-                        "/engage/ui/js/engage_plugins/segments-plugin.js",
-                        "/engage/ui/js/engage_plugins/segments_text.js",
-                        "/engage/ui/js/engage_plugins/segments_text-plugin.js",
-                        "/engage/ui/js/engage_plugins/series-plugin.js",
-                        "/engage/ui/js/engage_plugins/series.js",
-                        "/engage/ui/js/engage_plugins/logging.js",
-                        "/engage/ui/js/player/player-multi-hybrid-initialize.js",
-                        "/engage/ui/js/ext/trimpath.js",
-                        "/engage/ui/js/player/watch.js",
-                        "/engage/ui/js/player/player-multi-hybrid-flash.js" ];
-        $.each(scripts, function(index, url){
-          var script = document.createElement('script');
-          script.src = url;
-          _element.append(script);
+        $.getScript("https://github.com/headjs/headjs/raw/v0.99/dist/head.min.js", function() {
+          head.js("/engage/ui/js/jquery/plugins/jquery.utils.js",
+                  "/engage/ui/js/bridge/lib/FABridge.js",
+                  "/engage/ui/js/bridge/Videodisplay.js",
+                  "/engage/ui/js/jquery/plugins/jARIA.js",
+                  "/engage/ui/js/jquery/plugins/jquery.cookie.js",
+                  "/engage/ui/js/jquery/plugins/jquery.corners.js",
+                  "/engage/ui/js/jquery/plugins/jquery.identicon5.js",
+                  "/engage/ui/js/jquery/plugins/jquery.crypt.js",
+                  "/engage/ui/js/player/init-watch.js",
+                  "/engage/ui/js/player/player-multi-hybrid-scubber.js",
+                  "/engage/ui/js/player/player-multi-hybrid.js",
+                  "/engage/ui/js/player/ariaSpinbutton.js",
+                  "/engage/ui/js/jquery/plugins/jquery.wysiwyg.js",
+                  "/engage/ui/js/jquery/plugins/jquery.client.js",
+                  "/engage/ui/js/jquery/plugins/jquery.sparkline.min.js",
+                  "/engage/ui/js/engage-ui.js",
+                  "/engage/ui/js/jquery/plugins/jquery.timers-1.2.js",
+                  "/engage/ui/js/engage_plugins/plugin-controller.js",
+                  "/engage/ui/js/engage_plugins/description.js",
+                  "/engage/ui/js/engage_plugins/download.js",
+                  "/engage/ui/js/engage_plugins/description-plugin.js",
+                  "/engage/ui/js/engage_plugins/segments_ui.js",
+                  "/engage/ui/js/engage_plugins/segments_ui-plugin.js",
+                  "/engage/ui/js/engage_plugins/segments_ui_slider-plugin.js",
+                  "/engage/ui/js/engage_plugins/segments.js",
+                  "/engage/ui/js/engage_plugins/segments-plugin.js",
+                  "/engage/ui/js/engage_plugins/segments_text.js",
+                  "/engage/ui/js/engage_plugins/segments_text-plugin.js",
+                  "/engage/ui/js/engage_plugins/series-plugin.js",
+                  "/engage/ui/js/engage_plugins/series.js",
+                  "/engage/ui/js/engage_plugins/logging.js",
+                  "/engage/ui/js/player/player-multi-hybrid-initialize.js",
+                  "/engage/ui/js/ext/trimpath.js",
+                  "/engage/ui/js/player/watch.js",
+                  "/engage/ui/js/player/player-multi-hybrid-flash.js", 
+                  function() { 
+                    _setEngageStream(stream);
+                    Opencast.Initialize.initme();
+                    _cleanupEngage();
+                    _generateQualitySelector();
+                  }
+          );
         });
-
-        _setEngageStream(stream);
-        Opencast.Initialize.initme();
-        _cleanupEngage();
-        _generateQualitySelector();
       });
     }
 

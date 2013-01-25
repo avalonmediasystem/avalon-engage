@@ -1,23 +1,33 @@
 #oc_quality { display: block }
-#oc_body { width: 620px; }
-#oc_flash-player { height: 420px;}
+#oc_body {
+  width: 590px;
+  border: 1px solid #dddddd;
+  background-color: #eeeeee;
+}
+
+#oc_flash-player { height: 350px;}
+
+#oc_flash-player-loading { position: absolute;}
+
+#oc_sound { min-width: 106px;}
+#oc_video-time { min-width: 210px;}
 
 @media (min-width: 1400px) {
     #oc_body { width: 860px; }
-    #oc_flash-player { height: 675px;}
+    #oc_flash-player { height: 484px;}
 }
 
 @media (min-width: 1200px) and (max-width: 1400px) {
     #oc_body { width: 720px; }
-    #oc_flash-player { height: 540px;}
+    #oc_flash-player { height: 405px;}
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
-    #oc_body { width: 580px; }
-    #oc_flash-player { height: 420px;}
+    #oc_body { width: 450px; }
+    #oc_flash-player { height: 253px;}
+    #oc_video-time { display: none; }
 }
 
 @media (max-width: 767px) {
 
 }
-
