@@ -41,7 +41,7 @@ avalonPlayer = function(id, opts) {
 
     function _generateHTML5Player(stream) {
       _element.html('<' + stream.format + ' poster= "' + _opts.poster + '" controls="controls" width="320" height="240">'
-                  + '  <source src="' + stream.hls + '"/><p>Your browser does not support our videos</p>'
+                  + '  <source src="' + stream.url + '"/><p>Your browser does not support our videos</p>'
                   + '</' + stream.format + '>');
     }
 
