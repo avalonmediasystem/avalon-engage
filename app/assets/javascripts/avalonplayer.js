@@ -118,6 +118,9 @@ avalonPlayer = function(id, opts) {
                     Opencast.Initialize.initme();
                     _cleanupEngage();
                     _generateQualitySelector();
+                    if (stream.format == "audio") {
+                      $("#oc_flash-player").addClass("audio");
+                    }
                   }
           );
         });

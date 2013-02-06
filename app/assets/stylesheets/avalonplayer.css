@@ -31,3 +31,5 @@
 @media (max-width: 767px) {
 
 }
+
+#oc_flash-player.audio { height: 0px }
