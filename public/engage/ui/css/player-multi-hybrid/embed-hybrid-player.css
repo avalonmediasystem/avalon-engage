@@ -22,6 +22,7 @@
 #oc-link-advanced-player img { position: relative; z-index: 500; padding: 10px; }
 #analytics-and-annotations { height: 18px; }
 #data { background: black; }
+/*
 body
 {
   font-family:              Verdana;
@@ -31,7 +32,7 @@ table
 {
   border-spacing:           0;
 } 
-                    
+*/                    
 .clear
 {   
   clear:                    both;   
@@ -308,12 +309,12 @@ table
   left:                     0;
   display:                  none;
 }
-
+/*
 img
 {
     border: none;
 }
-
+*/
 #draggable 
 { 
   background:               transparent url("/engage/ui/img/engage_player/oc_icons.png");
@@ -328,8 +329,10 @@ img
   left:                     0;
 }
 
+/*
 button::-moz-focus-inner,
 input::-moz-focus-inner,
+*/
 #draggable::-moz-focus-inner
 {
     border: none;
