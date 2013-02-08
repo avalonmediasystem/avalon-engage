@@ -5,7 +5,10 @@
   background-color: #eeeeee;
 }
 
-#oc_flash-player { height: 350px;}
+#oc_flash-player { 
+  height: 350px; 
+  background-color: black;
+}
 
 #oc_flash-player-loading { position: absolute;}
 
