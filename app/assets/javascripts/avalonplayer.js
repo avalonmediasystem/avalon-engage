@@ -39,10 +39,23 @@ avalonPlayer = function(id, opts) {
       return this;
     }
 
+    /*
+     * Assemble HTML snippets to create an HTML5 multimedia player. To change 
+     * the appearance modify the segments at the end of the source file
+     */
     function _generateHTML5Player(stream) {
-      _element.html('<' + stream.format + ' poster= "' + _opts.poster + '" controls="controls" width="320" height="240">'
-                  + '  <source src="' + stream.url + '"/><p>Your browser does not support our videos</p>'
-                  + '</' + stream.format + '>');
+      var container = this.html5container;
+      if ("audio" == stream.format) {
+        var player = $(this.html5audioplayer);
+        var source = $(this.html5audiosource).attr('src', stream.url);
+        container.append(player).append(source);
+      } else if ("video" == stream.format) {    
+        var player = $(this.html5videoplayer).attr('poster', opts.poster);
+        var source = 4(this.html5videosource).attr('src', stream.url);    
+      } else {
+        /* Do nothing */
+      }
+      container.append(this.unsupportedMessage);
     }
 
     function _setEngageStream(stream) {
@@ -158,7 +171,7 @@ avalonPlayer = function(id, opts) {
     }
 
     function _appendQualityOptions(streamArray, selector) {
-      for (var i = 0; i < streamArray.length; i++) {
+      streamArray.each(function(i) {
         var quality = streamArray[i].quality;
         var opt = $('<option/>').attr('value', quality).text(quality);
         selector.append(opt);
@@ -190,4 +203,17 @@ avalonPlayer = function(id, opts) {
   } else {
     return null;
   }
+
+  /*
+   * Stubs for the audio and video players. Before placing in the page
+   * it is suggested to switch out attributes like the poster image
+   */
+  html5container: '<div class="span8" id="html5_multimedia"></div>'
+  html5videoplayer: "<video poster='placeholder.png' controls='controls'></video>"
+  html5videosource: "<source src='placeholder' type='video/mp4; codecs=\"h.264, aac\"'> 
+
+  html5audioplayer: "<audio controls='controls'></audio>"
+  html5audiosource: "<source src='placeholder' type='audio/mp3'>"
+  
+  unsupportedMessage: "<p>Your browser does not appear to support HTML5 video or audio content.</p>"
 };
