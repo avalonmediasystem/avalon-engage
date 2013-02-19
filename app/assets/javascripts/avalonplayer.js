@@ -10,17 +10,12 @@ window.AvalonPlayer = {
       
       if (_opts.flash && swfobject.hasFlashPlayerVersion("9")) {
         // Pulls in Engage, renders the first stream
-        _generateEngagePlayer(_opts.flash[0]);
+        this.generateEngagePlayer(_opts.flash[0]);
         _playerType = "flash";
       } else if (_opts.hls) {
-        var player = AvalonPlayer.generateHTML5Player(_opts.hls[0]);
-        _element.empty().append(player);
-        
-        alert(_element.html());
-        alert(player.html());
-        
+        var player = this.generateHTML5Player(_opts.hls[0]);
         _playerType = "hls";
-        _generateQualitySelector();
+        this.generateQualitySelector();
       } else if (_opts.flash && !swfobject.hasFlashPlayerVersion("9")) {
         _element.html('<p>Please install/update your Flash player</p>');
       }
@@ -52,33 +47,25 @@ window.AvalonPlayer = {
     generateHTML5Player: function(stream) {
       var container = $(AvalonPlayer.html5container);
       alert("HTML : " + AvalonPlayer.html5container);
-      alert("Content : " + container.html());
-      
-      if ("audio" == stream.format) {
-        var player = $(AvalonPlayer.html5audioplayer);
-        var source = $(AvalonPlayer.html5audiosource).attr('src', stream.url);
-        container.append(player).append(source);
-        alert("Content : " + container.html());
 
+      if ("audio" == stream.format) {
+        var player = $(this.html5audioplayer);
+        var source = $(this.html5audiosource).attr('src', stream.url);
+        container.append(player).append(source);
       } else if ("video" == stream.format) {    
-        var player = $(AvalonPlayer.html5videoplayer).attr('poster', _opts.poster);
-        var source = $(AvalonPlayer.html5videosource).attr('src', stream.url);    
-        
-        alert("Content : " + container.html());
+        var source = $(this.html5videosource).attr('src', stream.url);    
+        var player = $(this.html5videoplayer).attr('poster', _opts.poster).append(source);
+        container.append(player);
       } else {
         /* Do nothing */
       }
       container.append(this.unsupportedMessage);
       alert('Container : ' + container.html());
       
-      alert('Opts : ' + _opts.length);
-      alert('Element : ' + _element);
-      alert('Player type : ' + _playerType);
-      
       return container.append(this.unsupportedMessage);
     },
 
-    _setEngageStream: function(stream) {
+    setEngageStream: function(stream) {
       // Overrides to return custom values instead of URL Params
       var origGetURLParameterFn = $.getURLParameter;
       $.getURLParameter = function (name) { 
@@ -95,7 +82,7 @@ window.AvalonPlayer = {
     },
 
     // This whole thing is horrible, needs fixing
-    _generateEngagePlayer: function(stream) {
+    generateEngagePlayer: function(stream) {
       var styles = ["/engage/ui/css/player-multi-hybrid/player-multi-hybrid.css",
                     "/engage/ui/css/player-multi-hybrid/player-multi-hybrid-icons.css",
                     "/engage/ui/css/player/shared.css",
@@ -147,10 +134,10 @@ window.AvalonPlayer = {
                   "/engage/ui/js/player/watch.js",
                   "/engage/ui/js/player/player-multi-hybrid-flash.js", 
                   function() { 
-                    _setEngageStream(stream);
+                    AvalonPlayer.setEngageStream(stream);
                     Opencast.Initialize.initme();
-                    _cleanupEngage();
-                    _generateQualitySelector();
+                    AvalonPlayer.cleanupEngage();
+                    AvalonPlayer.generateQualitySelector();
                     if (stream.format == "audio") {
                       $("#oc_flash-player").addClass("audio");
                     }
@@ -160,7 +147,7 @@ window.AvalonPlayer = {
       });
     },
 
-    _generateQualitySelector: function() {      
+    generateQualitySelector: function() {      
       var selector = $('<select id="oc_quality"></select>');
       if ($("#oc_quality").length > 0) {
         selector = $("#oc_quality");
@@ -168,9 +155,9 @@ window.AvalonPlayer = {
         selector.unbind();
       }
       if (_playerType == "flash") {
-        _appendQualityOptions(_opts.flash, selector);
+        this.appendQualityOptions(_opts.flash, selector);
       } else if (_playerType == "hls") {
-        _appendQualityOptions(_opts.hls, selector);
+        this.appendQualityOptions(_opts.hls, selector);
       }
 
       selector.change(function() {
@@ -179,7 +166,7 @@ window.AvalonPlayer = {
         if (_playerType == "flash") {
           var streamInfo = _getStreamByQuality(_opts.flash, newQual);
           Opencast.Player.doPause();
-          _setEngageStream(streamInfo);
+          this.setEngageStream(streamInfo);
           Opencast.Initialize.initme();
         } else if (_playerType == "hls") {
           var streamInfo = _getStreamByQuality(_opts.hls, newQual);
@@ -190,7 +177,7 @@ window.AvalonPlayer = {
       _element.append(selector);
     },
 
-    _appendQualityOptions: function(streamArray, selector) {
+    appendQualityOptions: function(streamArray, selector) {
       $.each(streamArray, function(index, stream) {
         var opt = $('<option/>').attr('value', stream.quality).text(stream.quality);
         selector.append(opt);
@@ -198,7 +185,7 @@ window.AvalonPlayer = {
     },
 
     // Gets a stream info hash of a specific quality
-    _getStreamByQuality: function(streamArray, quality) {
+    getStreamByQuality: function(streamArray, quality) {
       for (var i = 0; i < streamArray.length; i++) {
         if (quality == streamArray[i].quality) {
           return streamArray[i];
@@ -206,7 +193,7 @@ window.AvalonPlayer = {
       }
     },
 
-    _cleanupEngage: function() {
+    cleanupEngage: function() {
       $("#oc_btn-description").parent().hide();
       $("#oc_btn-slidetext").parent().hide();
       $("#oc_btn-slides").parent().hide();
@@ -221,7 +208,7 @@ window.AvalonPlayer = {
      * it is suggested to switch out attributes like the poster image
      */
     html5container: '<div class="span8" id="html5_multimedia"></div>',
-    html5videoplayer: "<video poster='placeholder.png' controls='controls' ,class='span8'><p>Booyah</p></video>",
+    html5videoplayer: "<video poster='placeholder.png' controls='controls' class='span8'></video>",
     html5videosource: "<source src='placeholder' type='video/mp4'>" ,
 
     html5audioplayer: "<audio controls='controls'></audio>",
