@@ -35,7 +35,7 @@ window.AvalonPlayer = {
         Opencast.Initialize.initme();
       } else if (_playerType == "hls") {
         generateHTML5Player(_opts.hls[0]);
-        _generateQualitySelector();
+        generateQualitySelector();
       }
       return this;
     },
@@ -45,9 +45,7 @@ window.AvalonPlayer = {
      * the appearance modify the segments at the end of the source file
      */
     generateHTML5Player: function(stream) {
-      var container = $(AvalonPlayer.html5container);
-      alert("HTML : " + AvalonPlayer.html5container);
-
+      var container = $(this.html5container);
       if ("audio" == stream.format) {
         var player = $(this.html5audioplayer);
         var source = $(this.html5audiosource).attr('src', stream.url);
@@ -60,7 +58,6 @@ window.AvalonPlayer = {
         /* Do nothing */
       }
       container.append(this.unsupportedMessage);
-      alert('Container : ' + container.html());
       
       return container.append(this.unsupportedMessage);
     },
