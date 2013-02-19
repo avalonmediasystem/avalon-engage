@@ -175,7 +175,7 @@ avalonPlayer = function(id, opts) {
         var quality = streamArray[i].quality;
         var opt = $('<option/>').attr('value', quality).text(quality);
         selector.append(opt);
-      }
+      });
     }
 
     // Gets a stream info hash of a specific quality
@@ -210,7 +210,7 @@ avalonPlayer = function(id, opts) {
    */
   html5container: '<div class="span8" id="html5_multimedia"></div>'
   html5videoplayer: "<video poster='placeholder.png' controls='controls'></video>"
-  html5videosource: "<source src='placeholder' type='video/mp4; codecs=\"h.264, aac\"'> 
+  html5videosource: "<source src='placeholder' type='video/mp4'>" 
 
   html5audioplayer: "<audio controls='controls'></audio>"
   html5audiosource: "<source src='placeholder' type='audio/mp3'>"
