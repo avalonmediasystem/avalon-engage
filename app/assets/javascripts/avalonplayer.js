@@ -14,6 +14,7 @@ window.AvalonPlayer = {
         _playerType = "flash";
       } else if (_opts.hls) {
         var player = this.generateHTML5Player(_opts.hls[0]);
+        _element.append(player);
         _playerType = "hls";
         this.generateQualitySelector();
       } else if (_opts.flash && !swfobject.hasFlashPlayerVersion("9")) {
@@ -31,11 +32,11 @@ window.AvalonPlayer = {
         Opencast.Player.setCurrentTime('00:00:00');
         Opencast.Player.setPlayhead(0);
  
-        setEngageStream(_opts.flash[0]);
+        AvalonPlayer.setEngageStream(_opts.flash[0]);
         Opencast.Initialize.initme();
       } else if (_playerType == "hls") {
-        generateHTML5Player(_opts.hls[0]);
-        generateQualitySelector();
+        AvalonPlayer.generateHTML5Player(_opts.hls[0]);
+        AvalonPlayer.generateQualitySelector();
       }
       return this;
     },
@@ -58,11 +59,12 @@ window.AvalonPlayer = {
         /* Do nothing */
       }
       container.append(this.unsupportedMessage);
+      alert('Container => ' + container.html());
       
-      return container.append(this.unsupportedMessage);
+      return container;
     },
 
-    setEngageStream: function(stream) {
+    setEngageStream: funcion(stream) {
       // Overrides to return custom values instead of URL Params
       var origGetURLParameterFn = $.getURLParameter;
       $.getURLParameter = function (name) { 
