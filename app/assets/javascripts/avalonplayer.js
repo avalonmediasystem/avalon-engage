@@ -59,7 +59,6 @@ window.AvalonPlayer = {
         /* Do nothing */
       }
       container.append(this.unsupportedMessage);
-      alert('Container => ' + container.html());
       
       return container;
     },
@@ -169,6 +168,10 @@ window.AvalonPlayer = {
           Opencast.Initialize.initme();
         } else if (_playerType == "hls") {
           var streamInfo = AvalonPlayer.getStreamByQuality(_opts.hls, newQual);
+	  /**
+	   * Here we can really just change the source instead of regenerating
+	   * the entire player. Need to look into best approaches 
+	   */
           AvalonPlayer.generateHTML5Player(streamInfo);
         }
       });
@@ -213,7 +216,7 @@ window.AvalonPlayer = {
     html5audioplayer: "<audio controls='controls'></audio>",
     html5audiosource: "<source src='placeholder' type='audio/mp3'>",
   
-    unsupportedMessage: "<p>Your browser does not appear to support HTML5 video or audio content.</p>"    
+    unsupportedMessage: "Your browser does not appear to support HTML5 video or audio content."    
 }
 
 /**
