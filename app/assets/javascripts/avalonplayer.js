@@ -69,7 +69,6 @@ window.AvalonPlayer = {
         if (name == "id") {
           return _opts.mediaPackageId;
         } else if (name == "mediaUrl1") {
-	  alert('Stream URL => ' + stream.url);
           return stream.url;
         } else if (name == "mimetype1") {
           return stream.mimetype;
