@@ -63,7 +63,7 @@ window.AvalonPlayer = {
       return container;
     },
 
-    setEngageStream: funcion(stream) {
+    setEngageStream: function(stream) {
       // Overrides to return custom values instead of URL Params
       var origGetURLParameterFn = $.getURLParameter;
       $.getURLParameter = function (name) { 
