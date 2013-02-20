@@ -31,7 +31,7 @@ window.AvalonPlayer = {
         Opencast.Player.setCurrentTime('00:00:00');
         Opencast.Player.setPlayhead(0);
  
-        _setEngageStream(_opts.flash[0]);
+        setEngageStream(_opts.flash[0]);
         Opencast.Initialize.initme();
       } else if (_playerType == "hls") {
         generateHTML5Player(_opts.hls[0]);
@@ -69,6 +69,7 @@ window.AvalonPlayer = {
         if (name == "id") {
           return _opts.mediaPackageId;
         } else if (name == "mediaUrl1") {
+	  alert('Stream URL => ' + stream.url);
           return stream.url;
         } else if (name == "mimetype1") {
           return stream.mimetype;
@@ -161,13 +162,13 @@ window.AvalonPlayer = {
         var newQual = $(this).val();
         // Repopulates player with the selected stream
         if (_playerType == "flash") {
-          var streamInfo = this.getStreamByQuality(_opts.flash, newQual);
+          var streamInfo = AvalonPlayer.getStreamByQuality(_opts.flash, newQual);
           Opencast.Player.doPause();
-          this.setEngageStream(streamInfo);
+          AvalonPlayer.setEngageStream(streamInfo);
           Opencast.Initialize.initme();
         } else if (_playerType == "hls") {
-          var streamInfo = this.getStreamByQuality(_opts.hls, newQual);
-          generateHTML5Player(streamInfo);
+          var streamInfo = AvalonPlayer.getStreamByQuality(_opts.hls, newQual);
+          AvalonPlayer.generateHTML5Player(streamInfo);
         }
       });
 
