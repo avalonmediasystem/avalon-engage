@@ -161,12 +161,12 @@ window.AvalonPlayer = {
         var newQual = $(this).val();
         // Repopulates player with the selected stream
         if (_playerType == "flash") {
-          var streamInfo = getStreamByQuality(_opts.flash, newQual);
+          var streamInfo = this.getStreamByQuality(_opts.flash, newQual);
           Opencast.Player.doPause();
           this.setEngageStream(streamInfo);
           Opencast.Initialize.initme();
         } else if (_playerType == "hls") {
-          var streamInfo = getStreamByQuality(_opts.hls, newQual);
+          var streamInfo = this.getStreamByQuality(_opts.hls, newQual);
           generateHTML5Player(streamInfo);
         }
       });
