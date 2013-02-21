@@ -51,10 +51,10 @@ window.AvalonPlayer = {
       var container = $(this.html5container);
       if ("audio" == stream.format) {
         var player = $(this.html5audioplayer);
-        var source = $(this.html5audiosource).attr('src', stream.url).attr('type', stream.mimetype);
+        var source = $(this.html5audiosource).attr('src', stream.url);
         container.append(player).append(source);
       } else if ("video" == stream.format) {    
-        var source = $(this.html5videosource).attr('src', stream.url);    
+        var source = $(this.html5videosource).attr('src', stream.url).attr('type', stream.mimetype);    
         var player = $(this.html5videoplayer).attr('poster', _opts.poster).append(source).append(this.unsuppportedMessage);
         container.append(player);
       } else {
