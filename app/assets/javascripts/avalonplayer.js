@@ -185,7 +185,6 @@ window.AvalonPlayer = {
     },
 
     updateLiveStream: function(stream) {
-      alert('Updating to ' + stream.url + "( " + stream.quality + ")");
       player = $('video');
       player.src = stream.url;
       player.load();
