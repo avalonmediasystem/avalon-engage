@@ -1,3 +1,6 @@
+/**
+ * Put everything into the AvalonPlayer namespace to avoid global conflicts
+ */
 window.AvalonPlayer = {
     _opts: null,
     _element: null,
@@ -10,11 +13,10 @@ window.AvalonPlayer = {
       
       if (_opts.flash && swfobject.hasFlashPlayerVersion("9")) {
         // Pulls in Engage, renders the first stream
-        this.generateEngagePlayer(_opts.flash[0]);
+        this.generateEngagePlayer(_opts.flash[0]);        
         _playerType = "flash";
       } else if (_opts.hls) {
         var player = this.generateHTML5Player(_opts.hls[0]);
-        _element.append(player);
         _playerType = "hls";
         this.generateQualitySelector();
       } else if (_opts.flash && !swfobject.hasFlashPlayerVersion("9")) {
@@ -49,21 +51,27 @@ window.AvalonPlayer = {
       var container = $(this.html5container);
       if ("audio" == stream.format) {
         var player = $(this.html5audioplayer);
-        var source = $(this.html5audiosource).attr('src', stream.url);
+        var source = $(this.html5audiosource).attr('src', stream.url).attr('type', stream.mimetype);
         container.append(player).append(source);
       } else if ("video" == stream.format) {    
         var source = $(this.html5videosource).attr('src', stream.url);    
-        var player = $(this.html5videoplayer).attr('poster', _opts.poster).append(source);
+        var player = $(this.html5videoplayer).attr('poster', _opts.poster).append(source).append(this.unsuppportedMessage);
         container.append(player);
       } else {
         /* Do nothing */
       }
-      container.append(this.unsupportedMessage);
+      $('#nojs').remove();
       
-      return container;
+      /**
+       * Debugging information
+       */
+      container.append("<!-- " + stream.url + "-->");
+      container.append("<!-- " + _opts.poster + "-->");
+      
+      _element.append(container);
     },
 
-    setEngageStream: funcion(stream) {
+    setEngageStream: function(stream) {
       // Overrides to return custom values instead of URL Params
       var origGetURLParameterFn = $.getURLParameter;
       $.getURLParameter = function (name) { 
@@ -94,7 +102,7 @@ window.AvalonPlayer = {
       });
       
       // Don't try this at home!
-      _element.load("/video_player.htm", function(){ 
+      _element.load("/video_player.htm", function() { 
         $.getScript("https://github.com/headjs/headjs/raw/v0.99/dist/head.min.js", function() {
           head.js("/engage/ui/js/jquery/plugins/jquery.utils.js",
                   "/engage/ui/js/bridge/lib/FABridge.js",
@@ -131,14 +139,15 @@ window.AvalonPlayer = {
                   "/engage/ui/js/ext/trimpath.js",
                   "/engage/ui/js/player/watch.js",
                   "/engage/ui/js/player/player-multi-hybrid-flash.js", 
+                  
                   function() { 
                     AvalonPlayer.setEngageStream(stream);
                     Opencast.Initialize.initme();
                     AvalonPlayer.cleanupEngage();
-                    AvalonPlayer.generateQualitySelector();
                     if (stream.format == "audio") {
                       $("#oc_flash-player").addClass("audio");
                     }
+                     AvalonPlayer.generateQualitySelector();
                   }
           );
         });
@@ -168,17 +177,20 @@ window.AvalonPlayer = {
           Opencast.Initialize.initme();
         } else if (_playerType == "hls") {
           var streamInfo = AvalonPlayer.getStreamByQuality(_opts.hls, newQual);
-	  /**
-	   * Here we can really just change the source instead of regenerating
-	   * the entire player. Need to look into best approaches 
-	   */
-          AvalonPlayer.generateHTML5Player(streamInfo);
+          AvalonPlayer.updateLiveStream(streamInfo);
         }
       });
 
       _element.append(selector);
     },
 
+    updateLiveStream: function(stream) {
+      alert('Updating to ' + stream.url + "( " + stream.quality + ")");
+      player = $('video');
+      player.src = stream.url;
+      player.load();
+    },
+    
     appendQualityOptions: function(streamArray, selector) {
       $.each(streamArray, function(index, stream) {
         var opt = $('<option/>').attr('value', stream.quality).text(stream.quality);
@@ -207,16 +219,18 @@ window.AvalonPlayer = {
 
     /*
      * Stubs for the audio and video players. Before placing in the page
-     * it is suggested to switch out attributes like the poster image
+     * it is suggested to switch out attributes like the poster image. Bootstrap
+     * class dependencies shouldn't be an issue because it is also required for
+     * Blacklight and Hydra.
      */
-    html5container: '<div class="span8" id="html5_multimedia"></div>',
+    html5container: '<div class="span8" id="multimedia_container"></div>',
     html5videoplayer: "<video poster='placeholder.png' controls='controls' class='span8'></video>",
     html5videosource: "<source src='placeholder' type='video/mp4'>" ,
 
     html5audioplayer: "<audio controls='controls'></audio>",
     html5audiosource: "<source src='placeholder' type='audio/mp3'>",
   
-    unsupportedMessage: "Your browser does not appear to support HTML5 video or audio content."    
+    unsupportedMessage: "<p>Your browser does not appear to support HTML5 video or audio content. Supported platforms are iOS and Android 4.0+.</p>"    
 }
 
 /**
