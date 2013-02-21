@@ -50,9 +50,9 @@ window.AvalonPlayer = {
     generateHTML5Player: function(stream) {
       var container = $(this.html5container);
       if ("audio" == stream.format) {
-        var player = $(this.html5audioplayer);
         var source = $(this.html5audiosource).attr('src', stream.url);
-        container.append(player).append(source);
+        var player = $(this.html5audioplayer).append(source).append(this.unsupportedMessage);
+        container.append(player);
       } else if ("video" == stream.format) {    
         var source = $(this.html5videosource).attr('src', stream.url).attr('type', stream.mimetype);    
         var player = $(this.html5videoplayer).attr('poster', _opts.poster).append(source).append(this.unsuppportedMessage);
@@ -61,12 +61,6 @@ window.AvalonPlayer = {
         /* Do nothing */
       }
       $('#nojs').remove();
-      
-      /**
-       * Debugging information
-       */
-      container.append("<!-- " + stream.url + "-->");
-      container.append("<!-- " + _opts.poster + "-->");
       
       _element.append(container);
     },
