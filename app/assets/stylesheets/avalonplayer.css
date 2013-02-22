@@ -1,8 +1,15 @@
-#oc_quality { display: block }
+#oc_quality { 
+  display: block; 
+}
+
+#oc_quality select {
+  text-transform: capitalize;
+}
+
 #oc_body {
   width: 590px;
-  border: 1px solid #dddddd;
-  background-color: #eeeeee;
+  border: 1px solid #DDD;
+  background-color: #EEE;
 }
 
 #oc_flash-player { 
@@ -10,29 +17,60 @@
   background-color: black;
 }
 
-#oc_flash-player-loading { position: absolute;}
+#oc_flash-player-loading { 
+  position: absolute;
+}
 
-#oc_sound { min-width: 106px;}
-#oc_video-time { min-width: 210px;}
+#oc_sound { 
+  min-width: 106px;
+}
+#oc_video-time { 
+  min-width: 210px;
+}
 
 @media (min-width: 1400px) {
-    #oc_body { width: 860px; }
-    #oc_flash-player { height: 484px;}
+    #oc_body { 
+      width: 860px; 
+    }
+    #oc_flash-player { 
+      height: 484px;
+    }
 }
 
 @media (min-width: 1200px) and (max-width: 1400px) {
-    #oc_body { width: 720px; }
-    #oc_flash-player { height: 405px;}
+    #oc_body { 
+      width: 720px;
+    }
+    #oc_flash-player { 
+      height: 405px;
+    }
 }
 
 @media (min-width: 768px) and (max-width: 979px) {
-    #oc_body { width: 450px; }
-    #oc_flash-player { height: 253px;}
-    #oc_video-time { display: none; }
+    #oc_body { 
+      width: 450px; 
+    }
+    #oc_flash-player { 
+      height: 253px;
+    }
+    #oc_video-time { 
+      display: none; 
+    }
 }
 
 @media (max-width: 767px) {
 
 }
 
-#oc_flash-player.audio { height: 0px }
+#oc_flash-player.audio { 
+  height: 0px 
+}
+
+/**
+ * Do some stuff to adjust the player size
+ */
+#player video,
+#player audio {
+  width: 95%;
+  height: auto;
+}

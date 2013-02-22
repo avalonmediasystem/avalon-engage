@@ -34,9 +34,17 @@ window.AvalonPlayer = {
         Opencast.Player.setCurrentTime('00:00:00');
         Opencast.Player.setPlayhead(0);
  
-        AvalonPlayer.setEngageStream(_opts.flash[0]);
+        stream = _opts.flash[0];
+        if ('audio' == stream.format) {
+          $("#oc_flash-player").addClass('audio');
+        } else {
+          $('#oc_flash-player').removeClass('audio');
+        };
+        AvalonPlayer.setEngageStream(stream);
         Opencast.Initialize.initme();
       } else if (_playerType == "hls") {
+        /* Quick and dirty */
+        _element.empty();
         AvalonPlayer.generateHTML5Player(_opts.hls[0]);
         AvalonPlayer.generateQualitySelector();
       }
@@ -51,17 +59,17 @@ window.AvalonPlayer = {
       var container = $(this.html5container);
       if ("audio" == stream.format) {
         var source = $(this.html5audiosource).attr('src', stream.url);
-        var player = $(this.html5audioplayer).append(source).append(this.unsupportedMessage);
-        container.append(player);
+        var player = $(this.html5audioplayer).attr('controls', 'controls').append(source).append(this.unsupportedMessage);
+        container.prepend(player);
       } else if ("video" == stream.format) {    
-        var source = $(this.html5videosource).attr('src', stream.url).attr('type', stream.mimetype);    
+        var source = $(this.html5videosource).attr('src', stream.url);    
         var player = $(this.html5videoplayer).attr('poster', _opts.poster).append(source).append(this.unsuppportedMessage);
-        container.append(player);
+        container.prepend(player);
       } else {
         /* Do nothing */
       }
       $('#nojs').remove();
-      
+
       _element.append(container);
     },
 
@@ -149,12 +157,13 @@ window.AvalonPlayer = {
     },
 
     generateQualitySelector: function() {      
-      var selector = $('<select id="oc_quality"></select>');
+      var selector = $(AvalonPlayer.selectDropdown);
       if ($("#oc_quality").length > 0) {
         selector = $("#oc_quality");
         selector.html("");
         selector.unbind();
       }
+      
       if (_playerType == "flash") {
         this.appendQualityOptions(_opts.flash, selector);
       } else if (_playerType == "hls") {
@@ -179,11 +188,11 @@ window.AvalonPlayer = {
     },
 
     updateLiveStream: function(stream) {
-      player = $('video');
+      player = _element.children().first();
       player.src = stream.url;
       player.load();
     },
-    
+        
     appendQualityOptions: function(streamArray, selector) {
       $.each(streamArray, function(index, stream) {
         var opt = $('<option/>').attr('value', stream.quality).text(stream.quality);
@@ -222,7 +231,8 @@ window.AvalonPlayer = {
 
     html5audioplayer: "<audio controls='controls'></audio>",
     html5audiosource: "<source src='placeholder' type='audio/mp3'>",
-  
+    
+    selectDropdown: "<select class=\"span8\"></select>",
     unsupportedMessage: "<p>Your browser does not appear to support HTML5 video or audio content. Supported platforms are iOS and Android 4.0+.</p>"    
 }
 
