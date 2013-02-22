@@ -1,4 +1,4 @@
-# Hydrant::Engage
+# Avalon::Engage
 
 Javascript/Flash hybrid media player forked from Matterhorn Engage.
 
@@ -6,7 +6,7 @@ Javascript/Flash hybrid media player forked from Matterhorn Engage.
 
 Add this line to your application's Gemfile:
 
-    gem 'hydrant-engage'
+    gem 'avalon-engage'
 
 And then execute:
 
@@ -14,7 +14,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install hydrant-engage
+    $ gem install avalon-engage
 
 ## Usage
 

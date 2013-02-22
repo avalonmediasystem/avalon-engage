@@ -1,6 +1,6 @@
-require "hydrant-engage/version"
+require "avalon-engage/version"
 
-module Hydrant
+module Avalon
   module Engage
     class Engine < ::Rails::Engine
 			initializer "static assets" do |app|
