@@ -46,8 +46,8 @@ window.AvalonPlayer = {
         /* Quick and dirty */
         _element.empty();
         AvalonPlayer.generateHTML5Player(_opts.hls[0]);
-        AvalonPlayer.generateQualitySelector();
       }
+      AvalonPlayer.generateQualitySelector();
       return this;
     },
 
@@ -143,13 +143,16 @@ window.AvalonPlayer = {
                   "/engage/ui/js/player/player-multi-hybrid-flash.js", 
                   
                   function() { 
+                    if (stream.format == "audio") {
+                      $("#oc_flash-player").addClass("audio");
+                      $('#oc_flash-player-loading').hide();
+                    } else if ('video' == stream.format) {
+                      $('#oc_flash-player-loading').show();
+                    }
                     AvalonPlayer.setEngageStream(stream);
                     Opencast.Initialize.initme();
                     AvalonPlayer.cleanupEngage();
-                    if (stream.format == "audio") {
-                      $("#oc_flash-player").addClass("audio");
-                    }
-                     AvalonPlayer.generateQualitySelector();
+                    AvalonPlayer.generateQualitySelector();
                   }
           );
         });
@@ -157,12 +160,11 @@ window.AvalonPlayer = {
     },
 
     generateQualitySelector: function() {      
-      var selector = $(AvalonPlayer.selectDropdown);
-      if ($("#oc_quality").length > 0) {
-        selector = $("#oc_quality");
-        selector.html("");
-        selector.unbind();
+      var selector = $('#streamQuality');
+      if (selector) {
+        selector.empty().unbind().detach();
       }
+      selector = $(AvalonPlayer.selectDropdown);
       
       if (_playerType == "flash") {
         this.appendQualityOptions(_opts.flash, selector);
@@ -232,7 +234,7 @@ window.AvalonPlayer = {
     html5audioplayer: "<audio controls='controls'></audio>",
     html5audiosource: "<source src='placeholder' type='audio/mp3'>",
     
-    selectDropdown: "<select class=\"span8\"></select>",
+    selectDropdown: "<select class=\"span8\" id='streamQuality'></select>",
     unsupportedMessage: "<p>Your browser does not appear to support HTML5 video or audio content. Supported platforms are iOS and Android 4.0+.</p>"    
 }
 

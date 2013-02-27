@@ -10,6 +10,10 @@
   width: 590px;
   border: 1px solid #DDD;
   background-color: #EEE;
+
+  /* Override the defaults */
+  margin-left: 0;
+  margin-bottom: 0;
 }
 
 #oc_flash-player { 
