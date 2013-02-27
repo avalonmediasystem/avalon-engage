@@ -105,7 +105,7 @@ window.AvalonPlayer = {
       
       // Don't try this at home!
       _element.load("/video_player.htm", function() { 
-        $.getScript("https://github.com/headjs/headjs/raw/v0.99/dist/head.min.js", function() {
+        $.getScript("<%= asset_path 'head.min.js' %>", function() {
           head.js("/engage/ui/js/jquery/plugins/jquery.utils.js",
                   "/engage/ui/js/bridge/lib/FABridge.js",
                   "/engage/ui/js/bridge/Videodisplay.js",
