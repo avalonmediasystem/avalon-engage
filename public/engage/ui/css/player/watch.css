@@ -140,14 +140,20 @@ input.ui-button {
     background-color: none;
     vertical-align: middle;
     text-align: center;
-    margin-bottom: 0px;
-    margin-top: 50px;
     padding: 0px;
-    width: 37%;
-    height: 140px;
+    width: 50%;
+    min-width: 100px;
+    
+    /*height: 140px;*/
+    height: 10%;
+    
     display: block;
+    /*
     margin-left: 37%;
     margin-right: 0 auto;
+    margin-bottom: 0px;
+    margin-top: 50px;
+    */
 }
 
 #matterhorn-init-logo {
@@ -165,21 +171,30 @@ input.ui-button {
     font-size:20px;
     font-family: arial, helvetica, clean, sans-serif;
     float: left;
-    height: 90px;
+    /* height: 90px; 
     line-height: 165px;
+    width: 50px;
+    */
+    height: 100%;
+    width: auto
     vertical-align: bottom;
+    /*
     margin-left: 5px;
     margin-right: 5px;
+    */
+    margin: 0 20px;
     position: relative;
 }
 
 #loading-init {
     background-image: url("/engage/ui/img/misc/squares.gif");
     background-repeat: no-repeat;
-    background-position: bottom center;
+    background-position: center center;
     display:block;
+    /* height: 90px; 
+       width: 43px; */
+    height: 100%;
     width: 43px;
-    height: 90px;
     float: left;
     position: relative;
 }
@@ -220,7 +235,35 @@ input.ui-button {
     z-index: 1;
 }
 
-#oc_player-head-right, #data, #oc_video-view, #oc_checkbox-statistics, #oc_label-statistics, #oc_checkbox-annotations, #oc_label-annotations, #analytics, #annotation, #segments_ui_slider_data1, #segments_ui_slider_data2, #segments_ui_slider_information, #oc_ui_tabs, #oc_description, #oc_slides, #oc_slidetext, #oc_search-segment, #oc_search, #segment-tooltip, #oc_embed, #oc_player-head-see-more, #segments-table2, #oc_video-quality, #oc_share-time, #oc_download-button, #oc_search, #oc_title-bar-gallery-link, #oc_mobile_redirect, #oc_ie8comments {
+#oc_player-head-right, 
+#data, 
+#oc_video-view, 
+#oc_checkbox-statistics, 
+#oc_label-statistics, 
+#oc_checkbox-annotations, 
+#oc_label-annotations, 
+#analytics, 
+#annotation, 
+#segments_ui_slider_data1, 
+#segments_ui_slider_data2, 
+#segments_ui_slider_information, 
+#oc_ui_tabs, 
+#oc_description, 
+#oc_slides, 
+#oc_slidetext, 
+#oc_search-segment, 
+#oc_search, 
+#segment-tooltip, 
+#oc_embed, 
+#oc_player-head-see-more, 
+#segments-table2, 
+#oc_video-quality, 
+#oc_share-time, 
+#oc_download-button, 
+#oc_search, 
+#oc_title-bar-gallery-link, 
+#oc_mobile_redirect, 
+#oc_ie8comments {
     display: none;
 }
 

@@ -144,10 +144,10 @@ window.AvalonPlayer = {
                   
                   function() { 
                     if (stream.format == "audio") {
-                      $("#oc_flash-player").addClass("audio");
-                      $('#oc_flash-player-loading').hide();
-                    } else if ('video' == stream.format) {
-                      $('#oc_flash-player-loading').show();
+                      $("#oc_flash-player").addClass('audio')
+                      $('#oc_flash-player-loading').addClass("audio");
+                    } else {
+                      $("#oc_flash-player", '#oc_flash-player-loading').removeClass("audio");
                     }
                     AvalonPlayer.setEngageStream(stream);
                     Opencast.Initialize.initme();

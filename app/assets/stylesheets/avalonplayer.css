@@ -23,6 +23,25 @@
 
 #oc_flash-player-loading { 
   position: absolute;
+  top: 45%;
+  left: 25%;
+  width: 50%;
+  
+  background: rgb(0, 0, 0);  
+  color: rgb(255, 255, 255);
+  text-align: center;  
+}
+
+#oc_flash-player-loading.audio {
+  position: relative;
+  top: 0;
+  left: 0;
+  
+  width: 720px;
+  /* Make it the same as the video controls that will replace it once the 
+   * stream is ready */
+  line-height: 44px;
+  height: 44px;
 }
 
 #oc_sound { 
