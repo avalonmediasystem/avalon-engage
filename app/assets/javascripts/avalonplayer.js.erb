@@ -104,7 +104,16 @@ window.AvalonPlayer = {
       });
       
       // Don't try this at home!
-      _element.load("/video_player.htm", function() { 
+      /*
+       * This kludge reduces jumpiness by hard coding the class elements
+       * into the page. It isn't DRY but it should work better for
+       * users
+       */
+      var player_page = "/video_player.htm";
+      if ("audio" == stream.format) {
+        player_page = "/audio_player.htm";
+      }
+      _element.load(player_page, function() { 
         $.getScript("<%= asset_path 'head.min.js' %>", function() {
           head.js("/engage/ui/js/jquery/plugins/jquery.utils.js",
                   "/engage/ui/js/bridge/lib/FABridge.js",
