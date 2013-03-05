@@ -21,23 +21,24 @@
   background-color: black;
 }
 
-#oc_flash-player-loading { 
+#oc_flash-player-loading.video { 
   position: absolute;
   top: 45%;
   left: 25%;
   width: 50%;
-  
+  height: 44px;
+ 
   background: rgb(0, 0, 0);  
   color: rgb(255, 255, 255);
   text-align: center;  
 }
 
+#oc_flash-player-loading,
 #oc_flash-player-loading.audio {
   position: relative;
   top: 0;
   left: 0;
   
-  /* width: 720px; */
   /* Make it the same as the video controls that will replace it once the 
    * stream is ready */
   line-height: 44px;
@@ -56,7 +57,7 @@
     #oc_flash-player-loading.audio { 
       width: 860px; 
     }
-    #oc_flash-player { 
+    #oc_flash-player.video { 
       height: 484px;
     }
 }
@@ -66,7 +67,7 @@
     #oc_flash-player-loading.audio { 
       width: 720px;
     }
-    #oc_flash-player { 
+    #oc_flash-player.video { 
       height: 405px;
     }
 }
@@ -76,7 +77,7 @@
     #oc_flash-player-loading.audio { 
       width: 450px; 
     }
-    #oc_flash-player { 
+    #oc_flash-player.video { 
       height: 253px;
     }
     #oc_video-time { 
@@ -88,7 +89,7 @@
 
 }
 
-#oc_flash-player.audio { 
+#oc_flash-player { 
   height: 0px 
 }
 

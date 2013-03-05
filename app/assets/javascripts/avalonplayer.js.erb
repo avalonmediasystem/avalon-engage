@@ -110,10 +110,14 @@ window.AvalonPlayer = {
        * users
        */
       var player_page = "/video_player.htm";
-      if ("audio" == stream.format) {
-        player_page = "/audio_player.htm";
-      }
       _element.load(player_page, function() { 
+		      /*
+		      if (stream.format == "audio") {
+                        $("#oc_flash-player", "#oc_flash-player-loading").removeClass('video').addClass('audio');
+                    } else {
+                      $("#oc_flash-player", '#oc_flash-player-loading').removeClass("audio").addClass('video');
+		      }
+		      */
         $.getScript("<%= asset_path 'head.min.js' %>", function() {
           head.js("/engage/ui/js/jquery/plugins/jquery.utils.js",
                   "/engage/ui/js/bridge/lib/FABridge.js",
@@ -151,14 +155,15 @@ window.AvalonPlayer = {
                   "/engage/ui/js/player/watch.js",
                   "/engage/ui/js/player/player-multi-hybrid-flash.js", 
                   
-                  function() { 
-                    if (stream.format == "audio") {
-                      $("#oc_flash-player").addClass('audio')
-                      $('#oc_flash-player-loading').addClass("audio");
-                    } else {
-                      $("#oc_flash-player", '#oc_flash-player-loading').removeClass("audio");
-                    }
-                    AvalonPlayer.setEngageStream(stream);
+                  function() { 	  
+		    if (stream.format == "audio") {
+                        $("#oc_flash-player").removeClass('video').addClass('audio');
+                        $("#oc_flash-player-loading").removeClass('video').addClass('audio');
+                   } else {
+                      $("#oc_flash-player").removeClass("audio").addClass('video');
+                      $('#oc_flash-player-loading').removeClass("audio").addClass('video');
+		    }
+		    AvalonPlayer.setEngageStream(stream);
                     Opencast.Initialize.initme();
                     AvalonPlayer.cleanupEngage();
                     AvalonPlayer.generateQualitySelector();
