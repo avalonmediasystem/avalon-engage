@@ -45,6 +45,15 @@
   height: 44px;
 }
 
+#oc_flash-player { 
+  height: 0px 
+}
+
+#oc_flash-player.video {
+  height: 329px;
+  width: 590px;
+}
+
 #oc_sound { 
   min-width: 106px;
 }
@@ -59,7 +68,9 @@
     }
     #oc_flash-player.video { 
       height: 484px;
-    }
+      width: 860px; 
+   }
+
 }
 
 @media (min-width: 1200px) and (max-width: 1400px) {
@@ -69,6 +80,7 @@
     }
     #oc_flash-player.video { 
       height: 405px;
+      width: 720px;
     }
 }
 
@@ -79,6 +91,7 @@
     }
     #oc_flash-player.video { 
       height: 253px;
+      width: 450px;
     }
     #oc_video-time { 
       display: none; 
@@ -86,11 +99,6 @@
 }
 
 @media (max-width: 767px) {
-
-}
-
-#oc_flash-player { 
-  height: 0px 
 }
 
 /**
