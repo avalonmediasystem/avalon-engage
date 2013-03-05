@@ -36,9 +36,9 @@ window.AvalonPlayer = {
  
         stream = _opts.flash[0];
         if ('audio' == stream.format) {
-          $("#oc_flash-player").addClass('audio');
+          $("#oc_flash-player").addClass('audio').removeClass('video');
         } else {
-          $('#oc_flash-player').removeClass('audio');
+          $('#oc_flash-player').removeClass('audio').addClass('video');
         };
         AvalonPlayer.setEngageStream(stream);
         Opencast.Initialize.initme();
