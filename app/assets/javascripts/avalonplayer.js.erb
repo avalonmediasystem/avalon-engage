@@ -53,22 +53,35 @@ window.AvalonPlayer = {
      * Assemble HTML snippets to create an HTML5 multimedia player. To change 
      * the appearance modify the segments at the end of the source file
      */
+    HTML5Aspect: 0.5625,
+
     generateHTML5Player: function(stream) {
+      var $t = this;
       var container = $(this.html5container);
       if ("audio" == stream.format) {
         var source = $(this.html5audiosource).attr('src', stream.url);
-        var player = $(this.html5audioplayer).attr('controls', 'controls').append(source).append(this.unsupportedMessage);
+        var player = $(this.html5audioplayer).width('100%').attr('controls', 'controls').append(source).append(this.unsupportedMessage);
         container.prepend(player);
       } else if ("video" == stream.format) {    
         var source = $(this.html5videosource).attr('src', stream.url);    
-        var player = $(this.html5videoplayer).attr('poster', _opts.poster).append(source).append(this.unsuppportedMessage);
+        var player = $(this.html5videoplayer).width('100%').attr('poster', _opts.poster).append(source).append(this.unsuppportedMessage);
         container.prepend(player);
-      } else {
+        $(player).bind('loadedmetadata', function() { $t.HTML5Aspect = this.videoHeight / this.videoWidth; $t.resizeHTML5Player(); })
+    } else {
         /* Do nothing */
       }
       $('#nojs').remove();
 
       _element.append(container);
+      $t.resizeHTML5Player();
+      $(window).bind('resize', function() { $t.resizeHTML5Player(); });
+    },
+
+    resizeHTML5Player: function() {
+      if (this.HTML5Aspect != null) {
+        var newHeight = $('video').width() * this.HTML5Aspect;
+        $('video').height(newHeight);
+      }
     },
 
     setEngageStream: function(stream) {
@@ -222,7 +235,7 @@ window.AvalonPlayer = {
         
     appendQualityOptions: function(streamArray, selector) {
       $.each(streamArray, function(index, stream) {
-        var opt = $('<option/>').attr('value', stream.quality).text(stream.quality);
+        var opt = $('<option/>').attr('value', stream.quality).text(stream.quality + " quality");
         selector.append(opt);
       });
     },
@@ -252,8 +265,8 @@ window.AvalonPlayer = {
      * class dependencies shouldn't be an issue because it is also required for
      * Blacklight and Hydra.
      */
-    html5container: '<div id="multimedia_container" class="span8 whitespace"></div>',
-    html5videoplayer: "<video poster='placeholder.png' controls></video>",
+    html5container: '<div id="multimedia_container" class="whitespace"></div>',
+    html5videoplayer: "<video poster='placeholder.png' preload='metadata' controls></video>",
     html5videosource: "<source src='placeholder' type='video/mp4'>" ,
 
     html5audioplayer: "<audio controls='controls'></audio>",

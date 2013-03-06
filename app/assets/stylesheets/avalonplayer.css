@@ -62,7 +62,9 @@
 }
 
 #streamQuality {
+  clear: both;
   margin-top: 18px;
+  text-transform: capitalize;
 }
 
 @media (min-width: 1400px) {
