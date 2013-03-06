@@ -30,10 +30,8 @@ window.AvalonPlayer = {
       _opts = opts;
       // Change source and reinitialize player based on _playerType
       if (_playerType == "flash") {
-        Opencast.Player.doPause();
-        Opencast.Player.setCurrentTime('00:00:00');
-        Opencast.Player.setPlayhead(0);
- 
+        AvalonPlayer.resetEngage();
+
         stream = _opts.flash[0];
         if ('audio' == stream.format) {
           $("#oc_flash-player").addClass('audio').removeClass('video');
@@ -191,7 +189,7 @@ window.AvalonPlayer = {
         // Repopulates player with the selected stream
         if (_playerType == "flash") {
           var streamInfo = AvalonPlayer.getStreamByQuality(_opts.flash, newQual);
-          Opencast.Player.doPause();
+          AvalonPlayer.resetEngage();
           AvalonPlayer.setEngageStream(streamInfo);
           Opencast.Initialize.initme();
         } else if (_playerType == "hls") {
@@ -203,6 +201,12 @@ window.AvalonPlayer = {
       _element.append(selector);
     },
 
+    resetEngage: function() {
+      Opencast.Player.doPause();
+      Opencast.Player.setCurrentTime('00:00:00');
+      Opencast.Player.setPlayhead(0);    
+    },
+    
     updateLiveStream: function(stream) {
       player = _element.find('video, audio')[0];
       player.pause();
