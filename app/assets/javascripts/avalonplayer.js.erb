@@ -204,7 +204,9 @@ window.AvalonPlayer = {
     },
 
     updateLiveStream: function(stream) {
-      player = _element.children().first();
+      player = _element.find('video, audio')[0];
+      player.pause();
+      
       player.src = stream.url;
       player.load();
     },
@@ -241,8 +243,8 @@ window.AvalonPlayer = {
      * class dependencies shouldn't be an issue because it is also required for
      * Blacklight and Hydra.
      */
-    html5container: '<div class="span8" id="multimedia_container"></div>',
-    html5videoplayer: "<video poster='placeholder.png' controls='controls' class='span8'></video>",
+    html5container: '<div id="multimedia_container"></div>',
+    html5videoplayer: "<video poster='placeholder.png' controls></video>",
     html5videosource: "<source src='placeholder' type='video/mp4'>" ,
 
     html5audioplayer: "<audio controls='controls'></audio>",
