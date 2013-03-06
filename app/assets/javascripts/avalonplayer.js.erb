@@ -207,9 +207,14 @@ window.AvalonPlayer = {
       player = _element.find('video, audio')[0];
       player.pause();
       
+      /**
+       * Start by getting rid of all the child <source> elements
+       */
+      $(player).find('source').detach();
+      
       player.src = stream.url;
       player.load();
-    },
+   },
         
     appendQualityOptions: function(streamArray, selector) {
       $.each(streamArray, function(index, stream) {
@@ -243,7 +248,7 @@ window.AvalonPlayer = {
      * class dependencies shouldn't be an issue because it is also required for
      * Blacklight and Hydra.
      */
-    html5container: '<div id="multimedia_container"></div>',
+    html5container: '<div id="multimedia_container" class="span8"></div>',
     html5videoplayer: "<video poster='placeholder.png' controls></video>",
     html5videosource: "<source src='placeholder' type='video/mp4'>" ,
 
