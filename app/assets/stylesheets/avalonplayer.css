@@ -65,18 +65,23 @@
   margin-top: 18px;
 }
 
+/* 
+ * This could probably be folded into the media query below at some 
+ * point but this leaves us options down the road
+ */
 @media (min-width: 1400px) {
     #oc_body,
     #oc_flash-player-loading.audio { 
-      width: 860px; 
+      width: 720px; 
     }
     #oc_flash-player.video { 
-      height: 484px;
-      width: 860px; 
+      height: 405px;
+      width: 720px; 
    }
 }
 
-@media (min-width: 1200px) and (max-width: 1400px) {
+
+@media (min-width: 1200px) and (max-width: 1400px) { 
     #oc_body,
     #oc_flash-player-loading.audio { 
       width: 720px;
