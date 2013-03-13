@@ -74,11 +74,11 @@
 @media (min-width: 1400px) {
     #oc_body,
     #oc_flash-player-loading.audio { 
-      width: 720px; 
+      width: 750px; 
     }
     #oc_flash-player.video { 
-      height: 405px;
-      width: 720px; 
+      height: 422px;
+      width: 750px; 
    }
 }
 
@@ -86,11 +86,11 @@
 @media (min-width: 1200px) and (max-width: 1400px) { 
     #oc_body,
     #oc_flash-player-loading.audio { 
-      width: 720px;
+      width: 750px;
     }
     #oc_flash-player.video { 
-      height: 405px;
-      width: 720px;
+      height: 422px;
+      width: 750px;
     }
 }
 
@@ -119,3 +119,10 @@
   width: 95%;
   height: auto;
 }
+
+/*
+ * Hide the player head so rows line up properly
+ */
+#oc-player_head {
+  display: none;
+}  
