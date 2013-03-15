@@ -103,8 +103,30 @@
       height: 253px;
       width: 450px;
     }
+
     #oc_video-time { 
-      display: none; 
+      min-width: 170px !important;
+      width: 170px !important;
+    }
+    
+    #oc_video-controls {
+      min-width: 130px !important;
+      width: 130px !important;
+      margin-left: 10px;
+    }
+   
+    /* Hide lots of stuff at this resolution */
+    #oc_btn-rewind,
+    #oc_btn-fast-forward,
+    #oc_volume-dropdown {
+      display: none;
+    }
+    #oc_volume-container {
+      margin-left: 35px;
+    }
+    
+    #oc_video-size-controls {
+      display: none;
     }
 }
 
@@ -121,8 +143,10 @@
 }
 
 /*
- * Hide the player head so rows line up properly
+ * Hide the player head so rows line up properly. Likewise suppress the video 
+ * player size controls since we are not using them
  */
-#oc-player_head {
+#oc_player-head,
+#oc-video-size-controls {
   display: none;
 }  
