@@ -238,6 +238,7 @@ Opencast.segments = (function ()
             $('.oc_btn-cc-on').css('backgroundPosition', '-0px -179px');
         }
         // player size
+        /* AVALON: conflicted with our responsive code
         if (playerWidth < 470)
         {
             $(".oc_btn-skip-backward").css('display', 'none');
@@ -258,7 +259,7 @@ Opencast.segments = (function ()
             margin = $('#oc_video-controls').width();
             margin = ((margin - controlswith) / 2) - 8;
             $("#oc_btn-play-pause").css("margin-left", margin + "px");
-        }
+        }*/
     }
     
     /**
