@@ -1,0 +1,26 @@
+/**
+ * Workarounds for Red5 related player bugs. If using Adobe Media Server
+ * or something else it is safe to remove this from the list of includes
+ */
+
+/**
+ * This hack rewinds because for some reason the event that is supposed to
+ * reset the Engage playhead does not fire. It is not perfect and should be
+ * taken out if a better solution is found
+ */
+function rewindStream() {
+  Videodisplay.stop();
+  Videodisplay.pause();
+  Videodisplay.seek(0);
+  Videodisplay.pause();
+}
+
+/**
+ * Part two of of the ugly hack for playback is to redefine the click event
+ * needs to be written to hook in the patch above
+ */
+/*
+$('#oc_btn-play-pause').click(function () {
+  Opencast.Player.
+  });
+*/
