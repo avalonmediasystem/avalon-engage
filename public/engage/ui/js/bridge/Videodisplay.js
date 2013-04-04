@@ -114,7 +114,7 @@ Videodisplay = (function ()
       if (initialized())
       {
         var v = b_Videodisplay_root.play();
-	  v = b_Videodisplay_root.play();
+	  //v = b_Videodisplay_root.play();
         return v;
       }
     }
@@ -159,6 +159,8 @@ Videodisplay = (function ()
       if (initialized())
       {
         var v = b_Videodisplay_root.pause();
+        clearInterval(resetFunction); // AVALON
+        console.log("clear");
         return v;
       } 
     }
@@ -246,7 +248,12 @@ Videodisplay = (function ()
     {
       if (initialized())
       {
-        var v = b_Videodisplay_root.fastForward();
+        if (Opencast.Player.isPlaying()) {
+          var v = b_Videodisplay_root.fastForward();
+        } else {
+          play();
+          var v = b_Videodisplay_root.fastForward();
+        }
         return v;
       }
     }
@@ -352,6 +359,7 @@ Videodisplay = (function ()
             // player in pause mode
             b_Videodisplay_root.play();
             var v = b_Videodisplay_root.seek(argNumber);
+            b_Videodisplay_root.pause();
             return v;
           }
         }
