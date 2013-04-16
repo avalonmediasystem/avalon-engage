@@ -249,6 +249,7 @@ Opencast.Watch = (function ()
             var URLParamRes2 = $.getURLParameter('mediaResolution2');
             var URLParamMT1 = $.getURLParameter('mimetype1');
             var URLParamMT2 = $.getURLParameter('mimetype2');
+            var URLParamCoverURL1 = $.getURLParameter('coverUrl1');
 
             // prefer URL parameter, don't set any of it to empty string because then flash init fails
             mediaPackageId = (URLParamId == null) ? ((data.mediaDebugInfo.mediaPackageId == "") ? null : data.mediaDebugInfo.mediaPackageId) : URLParamId;
@@ -267,6 +268,7 @@ Opencast.Watch = (function ()
             $.log("Media resolution 1: " + mediaResolutionTwo);
             $.log("Mimetype 1: " + mimetypeOne);
             $.log("Mimetype 2: " + mimetypeTwo);
+            $.log("Cover URL 1: " + coverUrlOne);
 
             $.log("Successfully parsed servicedata.json");
             
@@ -401,7 +403,12 @@ Opencast.Watch = (function ()
         }
         // mimetypeOne = "audio/x-flv";
         // mimetypeTwo = "audio/x-flv";
-        coverUrlOne = $('#oc-cover-presenter').text();
+        
+        //First see if we have one from GetURLParameter
+	if (coverUrlOne === null)
+        {
+            coverUrlOne = $('#oc-cover-presenter').text();
+	}
         coverUrlTwo = $('#oc-cover-presentation').text();
         if (coverUrlOne === null)
         {

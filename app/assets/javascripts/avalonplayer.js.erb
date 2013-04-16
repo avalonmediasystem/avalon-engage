@@ -94,6 +94,8 @@ window.AvalonPlayer = {
           return stream.url;
         } else if (name == "mimetype1") {
           return stream.mimetype;
+        } else if (name == "coverUrl1") {
+          return stream.poster;
         } else { 
           return origGetURLParameterFn(name);
         }  
