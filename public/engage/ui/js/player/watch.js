@@ -259,6 +259,7 @@ Opencast.Watch = (function ()
             mediaResolutionTwo = (URLParamRes2 == null) ? ((data.mediaDebugInfo.mediaResolutionTwo == "") ? null : data.mediaDebugInfo.mediaResolutionTwo) : URLParamRes2;
             mimetypeOne = (URLParamMT1 == null) ? ((data.mediaDebugInfo.mimetypeOne == "") ? null : data.mediaDebugInfo.mimetypeOne) : URLParamMT1;
             mimetypeTwo = (URLParamMT2 == null) ? ((data.mediaDebugInfo.mimetypeTwo == "") ? null : data.mediaDebugInfo.mimetypeTwo) : URLParamMT2;
+            coverUrlOne = (URLParamCoverURL1 == null) ? ((data.mediaDebugInfo.coverUrlOne == "") ? null : data.mediaDebugInfo.coverUrlOne) : URLParamCoverURL1;
             
             $.log("Media Debug Info");
             $.log("Mediapackage ID: " + mediaPackageId);
