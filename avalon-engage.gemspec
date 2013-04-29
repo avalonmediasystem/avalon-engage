@@ -2,6 +2,7 @@
 require File.expand_path('../lib/avalon-engage/version', __FILE__)
 
 Gem::Specification.new do |gem|
+  gem.license = "Apache 2.0"
   gem.authors       = ["phuongdh"]
   gem.email         = ["phuongdh@gmail.com"]
   gem.description   = %q{Matterhorn Engage player}
