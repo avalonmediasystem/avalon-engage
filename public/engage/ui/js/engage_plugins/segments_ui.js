@@ -1,3 +1,9 @@
+/* 
+ * This file has been modified from the original distribution. 
+ * Modifications Copyright 2013 The Trustees of Indiana University and Northwestern University.
+ * ---  END LICENSE_HEADER BLOCK  ---
+*/
+
 /**
  *  Copyright 2009-2011 The Regents of the University of California
  *  Licensed under the Educational Community License, Version 2.0
