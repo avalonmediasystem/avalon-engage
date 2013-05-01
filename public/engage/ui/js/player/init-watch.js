@@ -1,3 +1,9 @@
+/* 
+ * This file has been modified from the original distribution. 
+ * Modifications Copyright 2013 The Trustees of Indiana University and Northwestern University.
+ * ---  END LICENSE_HEADER BLOCK  ---
+*/
+
 $(document).ready( function() {
     $.ajax({
         url: '/info/me.json',
