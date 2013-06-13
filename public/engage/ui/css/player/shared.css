@@ -86,7 +86,7 @@ body {
 	top: 0;
 }
 
-#header {
+/*#header {
     position:relative;
     height: 80px;
 }
@@ -95,7 +95,7 @@ body {
     padding: 4px 0 0 140px;
     margin-bottom:20px
 }
-
+*/
 #oclogo {
     position:absolute;
     right: 0;
